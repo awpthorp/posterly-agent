@@ -84,7 +84,7 @@ npx -y @posterly/cli@latest posts:create --account-id <id> --caption "Launching 
 Command map:
 
 ```
-auth:login | auth:key | auth:status | auth:logout | doctor | whoami
+auth:login | auth:key | auth:status | auth:logout | doctor | version | whoami
 accounts:list | accounts:disconnect | connect:link
 oauth:clients | oauth:create-client | oauth:update-client | oauth:delete-client
 brands:list | brands:get | brands:accounts | brands:profile
@@ -94,7 +94,7 @@ slots:next
 media:upload | media:signed-upload | media:upload-from-url
 analytics:account | analytics:posts
 gbp:reviews | gbp:review-link | gbp:audit | gbp:media | gbp:add-media | gbp:delete-media | gbp:suggest-reply | gbp:reply | gbp:delete-reply
-ai:video-options | ai:video-function | ai:generate-video | ai:video-jobs | ai:video-job
+ai:captions | ai:image | ai:video-options | ai:video-function | ai:generate-video | ai:video-jobs | ai:video-job
 activity:list | notifications:list | x:quota
 webhooks:list | webhooks:create | webhooks:update | webhooks:delete | webhooks:test
 ```
