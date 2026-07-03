@@ -1,0 +1,20 @@
+{
+  "name": "posterly-agent",
+  "owner": {
+    "name": "posterly",
+    "email": "alex@poster.ly"
+  },
+  "metadata": {
+    "description": "posterly social media scheduling skill for AI agents across 17 platforms",
+    "version": "1.2.0"
+  },
+  "plugins": [
+    {
+      "name": "posterly",
+      "description": "Social media scheduling for AI agents: create, schedule, and manage posts across 17 platforms including Instagram, TikTok, LinkedIn, YouTube, X, Facebook, Threads, Pinterest, and Google Business Profile via MCP, CLI, or REST",
+      "source": "./",
+      "strict": false,
+      "skills": ["./"]
+    }
+  ]
+}
