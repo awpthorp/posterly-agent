@@ -163,6 +163,10 @@ When MCP is available, prefer these tool names directly:
 58. `delete_webhook`
 59. `test_webhook`
 60. `get_x_posting_quota`
+61. `get_performance_profile`
+62. `get_post_insights`
+63. `list_post_suggestions`
+64. `dismiss_suggestion`
 
 When MCP is not available, use the CLI command map above or the REST API routes below to access the same posterly capability surface.
 
