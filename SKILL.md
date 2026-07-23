@@ -1,41 +1,88 @@
 ---
-name: posterly-social-manager
-version: 1.2.0
-title: Social Media Scheduler (via poster.ly)
-description: Turn your agent (Claude Code, OpenClaw, Cursor, or any MCP- or terminal-capable runtime) into an autonomous social media manager using posterly. Prefer MCP when the runtime supports it, use the posterly CLI when you can run shell commands, and fall back to the posterly REST API with the same API key otherwise. Covers 17 platforms: brands, brand profiles, learned voice, media upload, post creation, scheduling, analytics, Google Business, and post management.
-license: MIT
-author: posterly <alex@poster.ly>
-homepage: https://www.poster.ly/agents
-repository: https://github.com/awpthorp/posterly-agent
-keywords: social-media, automation, posterly, instagram, tiktok, youtube, twitter, linkedin, scheduling, mcp, cli, ai-agent
+name: posterly
+description: >-
+  Schedule social media posts across 18 platforms with posterly (Instagram, TikTok,
+  LinkedIn, YouTube, X, Facebook, Threads, Pinterest, Google Business Profile,
+  Telegram, Bluesky, Discord, Slack, Mastodon, Dev.to, Hashnode, WordPress, Lemmy).
+  Use when the user wants to schedule posts, upload media, list connected accounts,
+  pull analytics, manage Google Business reviews, or automate social media via CLI, MCP, or REST.
+allowed-tools: Bash(npx:*) Bash(posterly:*)
 metadata:
   openclaw:
     requires:
       env:
         - POSTERLY_API_KEY
     primaryEnv: POSTERLY_API_KEY
+  clawdbot:
+    emoji: "📣"
+    requires:
+      bins: []
+      env:
+        - POSTERLY_API_KEY
+        - POSTERLY_URL
 ---
 
-# Social Media Scheduler (via poster.ly)
+# posterly (v1.3.0)
 
-Autonomously manage social media posting across 17 platforms via [posterly](https://www.poster.ly).
+Autonomously manage social media posting across 18 platforms via [posterly](https://www.poster.ly).
 
 This skill supports three interchangeable interfaces, all authenticated by the same `POSTERLY_API_KEY`:
 
 1. **MCP** - prefer the posterly MCP server when your runtime can access MCP tools.
-2. **CLI** - use `npx -y @posterly/cli@latest` when you can run shell commands (Claude Code, terminal agents, CI).
+2. **CLI** - use `npx -y @posterly/cli@latest` when you can run shell commands (Claude Code, terminal agents, CI). After a global install (`npm i -g @posterly/cli`), the `posterly` binary works the same way.
 3. **REST** - call the posterly REST API directly when neither MCP nor a shell is available.
+
+## Core Workflow
+
+Follow this loop for almost every social task:
+
+1. **Discover** - confirm the key works (`whoami` / `doctor`), list accounts or resolve brands, and check platform schemas when settings matter.
+2. **Prepare media** - upload local files, pull remote URLs into posterly storage, or use signed upload for large assets.
+3. **Post** - create or schedule with caption, media, and `scheduled_at` (omit for immediate publish only after the user confirms).
+4. **Analyze** - pull account or post analytics, activity, or Google Business reviews when the user asks how content performed.
+5. **Repair** - inspect `posts:missing` / `get_post_missing`, fix failed posts, and set release IDs when external release metadata is required.
+
+Prefer MCP tools when they are available. Fall back to the CLI, then REST.
+
+## Quick Reference
+
+```bash
+# Preferred: always-current CLI via npx (no global install)
+export POSTERLY_API_KEY=pst_live_...
+# optional override (default https://www.poster.ly)
+# export POSTERLY_URL=https://www.poster.ly
+
+npx -y @posterly/cli@latest doctor --pretty
+npx -y @posterly/cli@latest whoami --pretty
+npx -y @posterly/cli@latest accounts:list --pretty
+npx -y @posterly/cli@latest platforms:list --pretty
+npx -y @posterly/cli@latest slots:next --count 3 --timezone America/New_York --pretty
+npx -y @posterly/cli@latest media:upload ./photo.jpg
+npx -y @posterly/cli@latest posts:create \
+  --account-id <id> \
+  --caption "Launching soon" \
+  --scheduled-at 2026-07-10T09:00:00Z
+npx -y @posterly/cli@latest posts:list --status scheduled --pretty
+npx -y @posterly/cli@latest posts:list --status failed --pretty
+npx -y @posterly/cli@latest posts:missing <post-id> --pretty
+npx -y @posterly/cli@latest analytics:account --account-id <id> --pretty
+
+# After global install: npm i -g @posterly/cli
+# posterly doctor --pretty
+```
 
 ## Setup
 
 1. Create a posterly account at [poster.ly](https://www.poster.ly)
-2. Connect your social accounts (Instagram, TikTok, LinkedIn, YouTube, etc.)
+2. Connect your social accounts (Instagram, TikTok, LinkedIn, YouTube, Slack, etc.)
 3. Enable API access (Dashboard -> Settings -> API Keys) - requires the $3/mo API add-on
-4. Store your API key in workspace `.env`:
+4. Store your API key (and optional base URL) in the environment or plugin userConfig:
    ```
-   POSTERLY_API_KEY=your_api_key
+   POSTERLY_API_KEY=pst_live_...
+   POSTERLY_URL=https://www.poster.ly
    ```
 5. Pick an interface: configure the posterly MCP server if your runtime supports MCP, use the CLI if you have a shell, or use the REST endpoints below.
+6. Smoke test with `npx -y @posterly/cli@latest doctor --pretty`.
 
 ## Auth
 
@@ -44,7 +91,20 @@ All requests use Bearer token:
 Authorization: Bearer <POSTERLY_API_KEY>
 ```
 
-Base URL: `https://www.poster.ly`
+Base URL: `https://www.poster.ly` (override with `POSTERLY_URL` when needed).
+
+## Human in the loop
+
+Confirm with the user before any public or irreversible action:
+
+- Publishing immediately (omitting `scheduled_at`)
+- Deleting posts or post groups
+- Disconnecting accounts
+- Posting or deleting Google Business review replies
+- Spending AI credits (image/video generation)
+- Any CLI command that requires `--confirm`
+
+Destructive CLI commands refuse to run without `--confirm`. Never add `--confirm` unless the user has approved the exact target.
 
 ## Interface 1: MCP
 
@@ -65,6 +125,8 @@ Example MCP client config:
 }
 ```
 
+Claude Code plugins that ship this package can also load MCP from `.mcp.json` using the plugin `userConfig.api_key`.
+
 ## Interface 2: CLI
 
 If you can run shell commands, the posterly CLI wraps the same API with no install step:
@@ -76,9 +138,11 @@ npx -y @posterly/cli@latest accounts:list
 npx -y @posterly/cli@latest posts:create --account-id <id> --caption "Launching soon" --scheduled-at 2026-07-10T09:00:00Z
 ```
 
-- Reads `POSTERLY_API_KEY` from the environment; humans can also run `auth:login` (browser OAuth) or `auth:key`.
+- Reads `POSTERLY_API_KEY` from the environment; optional `POSTERLY_URL` overrides the API origin (default `https://www.poster.ly`).
+- Humans can also run `auth:login` (browser OAuth) or `auth:key`.
 - Every command prints JSON to stdout, so output is directly parseable. Add `--pretty` for humans.
 - Destructive commands (`posts:delete`, `posts:delete-group`, `accounts:disconnect`, `gbp:reply`, `webhooks:delete`, ...) refuse to run without `--confirm`. Keep that guard: confirm with the user before adding `--confirm`.
+- Prefer `npx -y @posterly/cli@latest` so the agent always uses the latest published CLI. After `npm i -g @posterly/cli`, the global `posterly` binary is equivalent.
 - Run `npx -y @posterly/cli@latest help` for the full command list.
 
 Command map:
@@ -99,7 +163,7 @@ activity:list | notifications:list | x:quota
 webhooks:list | webhooks:create | webhooks:update | webhooks:delete | webhooks:test
 ```
 
-## Capability Surface (60)
+## Capability Surface (60+)
 
 When MCP is available, prefer these tool names directly:
 
@@ -551,7 +615,7 @@ POST /api/v1/webhooks/<webhook_id>/test
 
 Use `/activity` for operational history. Use webhooks for unattended workflows that need `post.created`, `post.updated`, `post.publishing`, `post.published`, or `post.failed` events.
 
-## Supported Platforms (17)
+## Supported Platforms (18)
 
 - Instagram (feed, reels, stories, carousels)
 - Facebook (posts, reels, stories)
@@ -565,6 +629,7 @@ Use `/activity` for operational history. Use webhooks for unattended workflows t
 - Telegram (channel posts)
 - Bluesky (text, image)
 - Discord (channel posts)
+- Slack (channel posts)
 - Mastodon (statuses)
 - Dev.to (articles)
 - Hashnode (articles)
@@ -594,10 +659,12 @@ Use `GET /api/v1/platforms` (or `list_platforms` / `platforms:list`) for the liv
 11. Use account or post analytics when the user asks how a brand or account is performing.
 12. Use `/activity` or webhooks to monitor publish outcomes.
 13. Use list posts with `status=failed` to catch and retry failures.
+14. Repair missing content or release IDs before a publish window when tools report incomplete posts.
 
 ## Tips
 
 - Treat MCP as the preferred interface, the CLI as the shell-friendly equivalent, and REST as the universal fallback.
+- Prefer `npx -y @posterly/cli@latest` over assuming a global `posterly` install.
 - Keep a human in the loop for anything public or irreversible: publishing immediately, deleting posts, disconnecting accounts, and replying to reviews.
 - Post to multiple platforms by creating separate posts for each account
 - Resolve brands first when the user speaks in client names instead of platform handles

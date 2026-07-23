@@ -5,16 +5,15 @@
     "email": "alex@poster.ly"
   },
   "metadata": {
-    "description": "posterly social media scheduling skill for AI agents across 17 platforms",
-    "version": "1.2.0"
+    "description": "posterly social media scheduling plugin for Claude Code across 18 platforms",
+    "version": "1.3.0"
   },
   "plugins": [
     {
       "name": "posterly",
-      "description": "Social media scheduling for AI agents: create, schedule, and manage posts across 17 platforms including Instagram, TikTok, LinkedIn, YouTube, X, Facebook, Threads, Pinterest, and Google Business Profile via MCP, CLI, or REST",
+      "description": "Social media automation for Claude: schedule posts, upload media, manage integrations, and track analytics across 18 platforms via MCP and the posterly CLI",
       "source": "./",
-      "strict": false,
-      "skills": ["./"]
+      "strict": false
     }
   ]
 }

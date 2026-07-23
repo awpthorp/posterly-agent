@@ -1,7 +1,8 @@
 {
   "name": "posterly",
-  "version": "1.2.0",
-  "description": "Social media scheduling for AI agents: create, schedule, and manage posts across 17 platforms including Instagram, TikTok, LinkedIn, YouTube, X, Facebook, Threads, Pinterest, and Google Business Profile via MCP, CLI, or REST",
+  "displayName": "posterly",
+  "version": "1.3.0",
+  "description": "Social media automation for Claude: schedule posts, upload media, manage integrations, and track analytics across 18 platforms via MCP and the posterly CLI",
   "author": {
     "name": "posterly",
     "email": "alex@poster.ly",
@@ -10,20 +11,32 @@
   "homepage": "https://www.poster.ly/agents",
   "repository": "https://github.com/awpthorp/posterly-agent",
   "license": "MIT",
-  "skills": ["./"],
   "keywords": [
     "posterly",
     "social-media",
     "scheduling",
     "automation",
-    "ai-agent",
     "mcp",
+    "cli",
     "instagram",
     "tiktok",
     "linkedin",
     "youtube",
     "twitter",
     "facebook",
-    "google-business-profile"
-  ]
+    "threads",
+    "pinterest",
+    "google-business-profile",
+    "slack",
+    "discord"
+  ],
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "posterly API key",
+      "description": "From Dashboard → Settings → API Keys (starts with pst_live_). Requires the $3/mo API add-on.",
+      "sensitive": true,
+      "required": true
+    }
+  }
 }
