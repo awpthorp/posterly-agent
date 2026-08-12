@@ -1,0 +1,18 @@
+{
+  "name": "posterly",
+  "owner": {
+    "name": "posterly",
+    "email": "alex@poster.ly"
+  },
+  "metadata": {
+    "description": "posterly social media scheduling plugin for Cursor across 18 platforms",
+    "version": "1.3.0"
+  },
+  "plugins": [
+    {
+      "name": "posterly",
+      "source": "./plugins/posterly",
+      "description": "Schedule, publish, and analyze social posts across 18 platforms from Cursor via MCP"
+    }
+  ]
+}

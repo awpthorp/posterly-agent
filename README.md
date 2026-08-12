@@ -51,6 +51,27 @@ After the plugin is installed, run:
 
 That walkthrough covers API key creation, env/userConfig, `doctor`, and `accounts:list`.
 
+## Install for Cursor
+
+This repo also ships a Cursor plugin at [`plugins/posterly/`](plugins/posterly/).
+
+After marketplace listing, search **posterly** in Cursor Marketplace / Customize and install it.
+
+Until then, symlink the plugin for local testing:
+
+```bash
+mkdir -p ~/.cursor/plugins/local
+ln -s "$(pwd)/plugins/posterly" ~/.cursor/plugins/local/posterly
+```
+
+Reload Cursor, then set `POSTERLY_API_KEY` under **Plugins -> Configure**.
+
+Validate the Cursor plugin layout from this repo root:
+
+```bash
+node scripts/validate-template.mjs
+```
+
 ## Setup
 
 1. Create a posterly account at [poster.ly](https://www.poster.ly) and connect your social accounts.

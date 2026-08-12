@@ -1,6 +1,6 @@
-# posterly Claude plugin + MCP directory submission
+# posterly Claude plugin, Cursor plugin, and MCP directory submission
 
-Human checklist for shipping the official Claude plugin listing and finishing MCP connector directory steps (including PR #309 follow-up on the main posterly app).
+Human checklist for shipping the official Claude plugin listing, the Cursor Marketplace listing, and finishing MCP connector directory steps (including PR #309 follow-up on the main posterly app).
 
 ## Claude plugin directory
 
@@ -49,6 +49,45 @@ Suggested form answers:
 - [ ] Smoke install in a clean Claude Code session
 - [ ] Confirm plugin userConfig API key unlocks MCP tools
 - [ ] Confirm `npx -y @posterly/cli@latest doctor --pretty` still works with the same key
+
+---
+
+## Cursor Marketplace
+
+Submit the public repo at https://cursor.com/marketplace/publish after the Cursor plugin files are on `main`.
+
+Suggested form answers:
+
+| Field | Value |
+| --- | --- |
+| Organization name | posterly |
+| Handle | posterly |
+| Logotype URL | https://www.poster.ly/logo_icon.png |
+| Website | https://www.poster.ly |
+| GitHub | https://github.com/awpthorp/posterly-agent |
+
+### Preflight (required)
+
+From this repo root (`posterly-agent`):
+
+```bash
+node scripts/validate-template.mjs
+```
+
+Must exit 0. A missing `hooks.json` warning is expected. A missing `mcp.json` warning is not.
+
+- [ ] `.cursor-plugin/marketplace.json` is present
+- [ ] `plugins/posterly/.cursor-plugin/plugin.json` is valid (name `posterly`, version `1.3.0`, `POSTERLY_API_KEY` variable, no secrets)
+- [ ] `node scripts/validate-template.mjs` passes
+- [ ] Skill copies stay in sync:
+  - `skills/posterly/SKILL.md` identical to `plugins/posterly/skills/posterly/SKILL.md`
+  - `skills/setup/SKILL.md` identical to `plugins/posterly/skills/setup/SKILL.md`
+
+### After listing
+
+- [ ] Search posterly in Cursor Marketplace / Customize and install it
+- [ ] Set `POSTERLY_API_KEY` under Plugins -> Configure
+- [ ] Confirm MCP tools load and `npx -y @posterly/cli@latest doctor --pretty` still works with the same key
 
 ---
 
