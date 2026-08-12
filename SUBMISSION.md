@@ -54,14 +54,19 @@ Suggested form answers:
 
 ## Cursor Marketplace
 
-Submit the public repo at https://cursor.com/marketplace/publish after the Cursor plugin files are on `main`.
+**Status: SUBMITTED 2026-08-12.** Receipt: "We've received your submission. We'll follow up at marketplace-publishing@cursor.com once we review your plugin."
 
-Suggested form answers:
+Watch `awpthorp@gmail.com` (including spam) for mail **from** `marketplace-publishing@cursor.com`. Do not resubmit unless they ask. Listing is not live until that review finishes.
+
+Public repo on `main` (commit `5f9afc2`): https://github.com/awpthorp/posterly-agent
+
+Form that was sent:
 
 | Field | Value |
 | --- | --- |
 | Organization name | posterly |
 | Handle | posterly |
+| Contact | awpthorp@gmail.com (Individual, Cursor account) |
 | Logotype URL | https://www.poster.ly/logo_icon.png |
 | Website | https://www.poster.ly |
 | GitHub | https://github.com/awpthorp/posterly-agent |
@@ -76,10 +81,10 @@ node scripts/validate-template.mjs
 
 Must exit 0. A missing `hooks.json` warning is expected. A missing `mcp.json` warning is not.
 
-- [ ] `.cursor-plugin/marketplace.json` is present
-- [ ] `plugins/posterly/.cursor-plugin/plugin.json` is valid (name `posterly`, version `1.3.0`, `POSTERLY_API_KEY` variable, no secrets)
-- [ ] `node scripts/validate-template.mjs` passes
-- [ ] Skill copies stay in sync:
+- [x] `.cursor-plugin/marketplace.json` is present
+- [x] `plugins/posterly/.cursor-plugin/plugin.json` is valid (name `posterly`, version `1.3.0`, `POSTERLY_API_KEY` variable, no secrets)
+- [x] `node scripts/validate-template.mjs` passes
+- [x] Skill copies stay in sync:
   - `skills/posterly/SKILL.md` identical to `plugins/posterly/skills/posterly/SKILL.md`
   - `skills/setup/SKILL.md` identical to `plugins/posterly/skills/setup/SKILL.md`
 
