@@ -1,54 +1,51 @@
 ---
 name: setup
-description: Guided posterly setup. Create an API key, set POSTERLY_API_KEY in Cursor plugin config, run doctor, and list connected accounts.
+description: Guided posterly first-time connect. Probe for an existing key, then onboard with agent signup, CLI login, or human pages. Store the key in Cursor Plugins -> Configure.
 ---
 
 # posterly setup
 
 Use this command when the user runs `/setup` or asks to connect posterly in Cursor for the first time.
 
-## Goal
+## First run
 
-Get a working `POSTERLY_API_KEY` in Cursor plugin config, verify CLI access, confirm connected social accounts, and prefer MCP tools for day-to-day work.
+Probe once. If MCP `whoami` or `npx -y @posterly/cli@latest doctor --pretty` succeeds, skip onboarding. Never start signup. Never ask the user to paste a key they already have. Prefer MCP tools for day-to-day work after the probe succeeds.
 
-## Steps
+If the probe fails, posterly is a social scheduler. API and MCP access need a paid plan plus the $3/mo API add-on. Never collect card numbers, posterly passwords, or social passwords. Payment and password setup stay in the user's browser.
 
-### 1. Sign up and connect an account
+Signup APIs never return a `pst_live_` key. Do not dump raw JSON. Narrate progress in plain language.
 
-1. Open [poster.ly](https://www.poster.ly) and sign in (or create an account).
-2. Connect at least one social account in the dashboard.
+### Path 1: agent signup (preferred when public MCP signup tools exist)
 
-### 2. Create an API key
+1. Call `get_agent_signup_info`.
+2. Ask the user for their email, then call `start_signup` with the Starter plan and `api_addon=true`.
+3. Send them `checkout_redirect_url` so they can pay in the browser.
+4. Poll `get_signup_session` and tell them what is happening (checkout pending, payment confirmed, password required, agent access required).
+5. When status is `agent_access_required`, ask them to copy the dashboard setup instructions or API key into this chat, or store it under **Plugins -> Configure** as `POSTERLY_API_KEY`.
 
-1. Open **Dashboard -> Settings -> API Keys** (or [Dashboard -> API & MCP](https://www.poster.ly/dashboard/api)).
-2. Enable the **$3/mo API add-on** if it is not already active.
-3. Create a key. It starts with `pst_live_`. Show the full key only once; store it securely.
-
-### 3. Set the key in Cursor
-
-1. Open **Plugins -> Configure** for the posterly plugin.
-2. Set `POSTERLY_API_KEY` to the new key.
-3. The bundled `mcp.json` injects it into the local MCP server. Do not put the key in git.
-
-### 4. Run doctor
+### Path 2: CLI login (shell, existing or new account)
 
 ```bash
+npx -y @posterly/cli@latest auth:login
 npx -y @posterly/cli@latest doctor --pretty
 ```
 
-Doctor checks Node, API origin, that a key is configured, and that `/api/v1/whoami` succeeds. Fix any failures before continuing.
+### Path 3: human pages
 
-### 5. List connected accounts
+- New users: https://www.poster.ly/agents/signup
+- Existing users: https://www.poster.ly/dashboard/api
+- Then paste the key into chat or **Plugins -> Configure**.
 
-```bash
-npx -y @posterly/cli@latest accounts:list --pretty
-```
+The bundled `mcp.json` injects `POSTERLY_API_KEY` into the local MCP server. Do not put the key in git.
 
-If the list is empty, send the user to connect accounts in the dashboard or use MCP/CLI connect handoff (`connect:link` / `get_connect_link`).
+### After auth
 
-### 6. Prefer MCP when available
+1. Call `whoami`.
+2. Ask which social account to connect first.
+3. Use `create_connect_session` or `connect:link`, send the connect URL, and poll until connected.
+4. Help schedule the first post.
 
-After setup, prefer MCP tools first: `whoami`, `list_accounts`, `create_post`, `upload_media`, analytics, and GBP tools. Fall back to `npx -y @posterly/cli@latest ...` when a shell is available but MCP is not.
+If doctor or whoami failed, stay on this script. Do not invent a second setup.
 
 ## Human in the loop
 
@@ -63,14 +60,15 @@ Confirm with the user before:
 
 ## Smoke checklist
 
-- [ ] `POSTERLY_API_KEY` is set in Plugins -> Configure
-- [ ] `npx -y @posterly/cli@latest doctor --pretty` exits 0
-- [ ] `accounts:list` shows at least one connected account (or user knows how to connect)
+- [ ] Probe succeeded (`whoami` or `doctor --pretty`)
+- [ ] `POSTERLY_API_KEY` is set in Plugins -> Configure if MCP needs it
+- [ ] At least one social account is connected, or the user has a connect URL
 - [ ] User understands human-in-the-loop rules
 
 ## Links
 
 - Agents: https://www.poster.ly/agents
+- Agent signup: https://www.poster.ly/agents/signup
 - MCP: https://www.poster.ly/mcp
 - CLI: https://www.poster.ly/cli
 - Docs: https://www.poster.ly/docs

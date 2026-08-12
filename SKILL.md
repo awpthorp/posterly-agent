@@ -32,6 +32,42 @@ This skill supports three interchangeable interfaces, all authenticated by the s
 2. **CLI** - use `npx -y @posterly/cli@latest` when you can run shell commands (Claude Code, terminal agents, CI). After a global install (`npm i -g @posterly/cli`), the `posterly` binary works the same way.
 3. **REST** - call the posterly REST API directly when neither MCP nor a shell is available.
 
+## First run
+
+Probe once. If MCP `whoami` or `npx -y @posterly/cli@latest doctor --pretty` succeeds, skip this section and go to Core Workflow. Never start signup. Never ask the user to paste a key they already have.
+
+If the probe fails, posterly is a social scheduler. API and MCP access need a paid plan plus the $3/mo API add-on. Never collect card numbers, posterly passwords, or social passwords. Payment and password setup stay in the user's browser.
+
+Signup APIs never return a `pst_live_` key. Do not dump raw JSON. Narrate progress in plain language.
+
+### Path 1: agent signup (preferred when public MCP signup tools exist)
+
+1. Call `get_agent_signup_info`.
+2. Ask the user for their email, then call `start_signup` with the Starter plan and `api_addon=true`.
+3. Send them `checkout_redirect_url` so they can pay in the browser.
+4. Poll `get_signup_session` and tell them what is happening (checkout pending, payment confirmed, password required, agent access required).
+5. When status is `agent_access_required`, ask them to copy the dashboard setup instructions or API key into this chat or their plugin config.
+
+### Path 2: CLI login (shell, existing or new account)
+
+```bash
+npx -y @posterly/cli@latest auth:login
+npx -y @posterly/cli@latest doctor --pretty
+```
+
+### Path 3: human pages
+
+- New users: https://www.poster.ly/agents/signup
+- Existing users: https://www.poster.ly/dashboard/api
+- Then paste the key into chat, env, or plugin config.
+
+### After auth
+
+1. Call `whoami`.
+2. Ask which social account to connect first.
+3. Use `create_connect_session` or `connect:link`, send the connect URL, and poll until connected.
+4. Help schedule the first post.
+
 ## Core Workflow
 
 Follow this loop for almost every social task:
@@ -73,16 +109,7 @@ npx -y @posterly/cli@latest analytics:account --account-id <id> --pretty
 
 ## Setup
 
-1. Create a posterly account at [poster.ly](https://www.poster.ly)
-2. Connect your social accounts (Instagram, TikTok, LinkedIn, YouTube, Slack, etc.)
-3. Enable API access (Dashboard -> Settings -> API Keys) - requires the $3/mo API add-on
-4. Store your API key (and optional base URL) in the environment or plugin userConfig:
-   ```
-   POSTERLY_API_KEY=pst_live_...
-   POSTERLY_URL=https://www.poster.ly
-   ```
-5. Pick an interface: configure the posterly MCP server if your runtime supports MCP, use the CLI if you have a shell, or use the REST endpoints below.
-6. Smoke test with `npx -y @posterly/cli@latest doctor --pretty`.
+If doctor or whoami failed, go back to First run. Do not invent a second setup.
 
 ## Auth
 

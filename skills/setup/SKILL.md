@@ -1,9 +1,8 @@
 ---
 name: setup
 description: >-
-  Guided posterly setup and onboarding for Claude Code: create an API key,
-  configure env or plugin userConfig, run doctor, list connected accounts, and
-  prefer MCP tools when available.
+  First-time posterly connect. Probe for an existing key, then onboard with
+  agent signup, CLI login, or human pages. Never collect cards or passwords.
 disable-model-invocation: true
 ---
 
@@ -11,77 +10,65 @@ disable-model-invocation: true
 
 Use this skill when the user runs `/posterly:setup` or asks to connect posterly for the first time.
 
-## Goal
+## First run
 
-Get a working `POSTERLY_API_KEY`, verify CLI access, confirm connected social accounts, and prefer MCP tools for day-to-day work.
+Probe once. If MCP `whoami` or `npx -y @posterly/cli@latest doctor --pretty` succeeds, skip onboarding. Never start signup. Never ask the user to paste a key they already have. Prefer MCP tools for day-to-day work after the probe succeeds.
 
-## Steps
+If the probe fails, posterly is a social scheduler. API and MCP access need a paid plan plus the $3/mo API add-on. Never collect card numbers, posterly passwords, or social passwords. Payment and password setup stay in the user's browser.
 
-### 1. Get an API key
+Signup APIs never return a `pst_live_` key. Do not dump raw JSON. Narrate progress in plain language.
 
-1. Open [poster.ly](https://www.poster.ly) and sign in (or create an account).
-2. Connect at least one social account in the dashboard.
-3. Open **Dashboard -> Settings -> API Keys** (or [Dashboard -> API & MCP](https://www.poster.ly/dashboard/api)).
-4. Enable the **$3/mo API add-on** if it is not already active.
-5. Create a key. It starts with `pst_live_`. Show the full key only once; store it securely.
+### Path 1: agent signup (preferred when public MCP signup tools exist)
 
-### 2. Configure the key
+1. Call `get_agent_signup_info`.
+2. Ask the user for their email, then call `start_signup` with the Starter plan and `api_addon=true`.
+3. Send them `checkout_redirect_url` so they can pay in the browser.
+4. Poll `get_signup_session` and tell them what is happening (checkout pending, payment confirmed, password required, agent access required).
+5. When status is `agent_access_required`, ask them to copy the dashboard setup instructions or API key into this chat, plugin config, or `POSTERLY_API_KEY`.
 
-**Claude Code plugin userConfig (preferred when this plugin is installed):**
-
-- Set the plugin `api_key` field to the new key.
-- The bundled `.mcp.json` injects it as `POSTERLY_API_KEY` for the local MCP server.
-
-**Environment variable (CLI, CI, and non-plugin agents):**
+### Path 2: CLI login (shell, existing or new account)
 
 ```bash
-export POSTERLY_API_KEY=pst_live_...
-# optional; default is https://www.poster.ly
-export POSTERLY_URL=https://www.poster.ly
-```
-
-Do not commit keys to git. Prefer shell env, secret managers, or plugin userConfig.
-
-### 3. Run doctor
-
-```bash
+npx -y @posterly/cli@latest auth:login
 npx -y @posterly/cli@latest doctor --pretty
 ```
 
-Doctor checks Node, API origin, that a key is configured, and that `/api/v1/whoami` succeeds. Fix any failures before continuing.
+### Path 3: human pages
 
-### 4. List connected accounts
+- New users: https://www.poster.ly/agents/signup
+- Existing users: https://www.poster.ly/dashboard/api
+- Then paste the key into chat, env, or plugin config.
 
-```bash
-npx -y @posterly/cli@latest accounts:list --pretty
-```
+### After auth
 
-If the list is empty, send the user to connect accounts in the dashboard or use MCP/CLI connect handoff (`connect:link` / `get_connect_link`).
+1. Call `whoami`.
+2. Ask which social account to connect first.
+3. Use `create_connect_session` or `connect:link`, send the connect URL, and poll until connected.
+4. Help schedule the first post.
 
-### 5. Prefer MCP when available
+If doctor or whoami failed, stay on this script. Do not invent a second setup.
 
-When MCP tools are loaded (Claude Code plugin, Claude Desktop, Cursor, etc.):
+## Human in the loop
 
-- Use MCP tools first: `whoami`, `list_accounts`, `create_post`, `upload_media`, analytics, GBP tools.
-- Fall back to `npx -y @posterly/cli@latest ...` when a shell is available but MCP is not.
-- Use REST only when neither MCP nor a shell is available.
+Confirm with the user before:
+
+- Publishing immediately (publish now)
+- Deleting posts or post groups
+- Disconnecting accounts
+- Posting or deleting Google Business review replies
+- Spending AI credits (image/video generation)
+- Any CLI command that requires `--confirm`
 
 ## Smoke checklist
 
-- [ ] `POSTERLY_API_KEY` is set (or plugin `api_key` is configured)
-- [ ] `npx -y @posterly/cli@latest doctor --pretty` exits 0
-- [ ] `accounts:list` shows at least one connected account (or user knows how to connect)
-- [ ] User understands human-in-the-loop rules: confirm before publish now, delete, disconnect, review replies, and any CLI `--confirm`
-
-## Example prompts after setup
-
-- "List my connected posterly accounts"
-- "Schedule a LinkedIn post for tomorrow at 10am about our product launch"
-- "Upload this image and draft an Instagram caption, then schedule it"
+- [ ] Probe succeeded (`whoami` or `doctor --pretty`)
+- [ ] At least one social account is connected, or the user has a connect URL
+- [ ] User understands human-in-the-loop rules
 
 ## Links
 
 - Agents: https://www.poster.ly/agents
+- Agent signup: https://www.poster.ly/agents/signup
 - MCP: https://www.poster.ly/mcp
 - CLI: https://www.poster.ly/cli
 - Docs: https://www.poster.ly/docs
