@@ -5,7 +5,8 @@ description: >-
   LinkedIn, YouTube, X, Facebook, Threads, Pinterest, Google Business Profile,
   Telegram, Bluesky, Discord, Slack, Mastodon, Dev.to, Hashnode, WordPress, Lemmy).
   Use when the user wants to schedule posts, upload media, list connected accounts,
-  pull analytics, manage Google Business reviews, or automate social media via CLI, MCP, or REST.
+  pull analytics, manage Google Business reviews, handle inbox DMs and comments,
+  or automate social media via CLI, MCP, or REST.
 allowed-tools: Bash(npx:*) Bash(posterly:*)
 metadata:
   openclaw:
@@ -22,7 +23,7 @@ metadata:
         - POSTERLY_URL
 ---
 
-# posterly (v1.3.0)
+# posterly (v1.3.1)
 
 Autonomously manage social media posting across 18 platforms via [posterly](https://www.poster.ly).
 
@@ -36,7 +37,7 @@ This skill supports three interchangeable interfaces, all authenticated by the s
 
 Probe once. If MCP `whoami` or `npx -y @posterly/cli@latest doctor --pretty` succeeds, skip this section and go to Core Workflow. Never start signup. Never ask the user to paste a key they already have.
 
-If the probe fails, posterly is a social scheduler. API and MCP access need a paid plan plus the $3/mo API add-on. Never collect card numbers, posterly passwords, or social passwords. Payment and password setup stay in the user's browser.
+If the probe fails, posterly is a social scheduler. API and MCP access need a paid plan plus the API add-on: $3/mo on Starter/Pro, $5/mo on Power, or $29/mo on Agency. Existing Power API subscribers keep their $3/mo rate while their add-on subscription continues. Never collect card numbers, posterly passwords, or social passwords. Payment and password setup stay in the user's browser.
 
 Signup APIs never return a `pst_live_` key. Do not dump raw JSON. Narrate progress in plain language.
 
@@ -44,8 +45,8 @@ Signup APIs never return a `pst_live_` key. Do not dump raw JSON. Narrate progre
 
 1. Call `get_agent_signup_info`.
 2. Ask the user for their email, then call `start_signup` with the Starter plan and `api_addon=true`.
-3. Send them `checkout_redirect_url` so they can pay in the browser.
-4. Poll `get_signup_session` and tell them what is happening (checkout pending, payment confirmed, password required, agent access required).
+3. Read the `payment` object for the amount and merchant. If you hold an approved payment credential (for example a Link agent wallet), pay `checkout_redirect_url` directly with it. If `agent_pay` is present, you may instead confirm that prepaid PaymentIntent with a Link virtual card (`credential_type: card`). Never send card numbers to posterly. Otherwise send `checkout_redirect_url` so they can pay in the browser.
+4. Poll `get_signup_session` and tell them what is happening (payment pending, payment confirmed, password required, agent access required).
 5. When status is `agent_access_required`, ask them to copy the dashboard setup instructions or API key into this chat or their plugin config.
 
 ### Path 2: CLI login (shell, existing or new account)
@@ -76,7 +77,7 @@ Follow this loop for almost every social task:
 2. **Prepare media** - upload local files, pull remote URLs into posterly storage, or use signed upload for large assets.
 3. **Post** - create or schedule with caption, media, and `scheduled_at` (omit for immediate publish only after the user confirms).
 4. **Analyze** - pull account or post analytics, activity, or Google Business reviews when the user asks how content performed.
-5. **Repair** - inspect `posts:missing` / `get_post_missing`, fix failed posts, and set release IDs when external release metadata is required.
+5. **Repair** - inspect `posts:missing` / `get_post_missing`, and set release IDs when external release metadata is required. For failed posts, inspect the post and recent activity first. Do not republish reconnect, re-upload, or edit-and-retry failures until the user has done that action. Temporary wait-class errors may already be retrying.
 
 Prefer MCP tools when they are available. Fall back to the CLI, then REST.
 
@@ -126,8 +127,10 @@ Confirm with the user before any public or irreversible action:
 
 - Publishing immediately (omitting `scheduled_at`)
 - Deleting posts or post groups
+- Deleting comments
 - Disconnecting accounts
 - Posting or deleting Google Business review replies
+- Sending DMs or hiding comments
 - Spending AI credits (image/video generation)
 - Any CLI command that requires `--confirm`
 
@@ -185,12 +188,12 @@ slots:next
 media:upload | media:signed-upload | media:upload-from-url
 analytics:account | analytics:posts
 gbp:reviews | gbp:review-link | gbp:audit | gbp:media | gbp:add-media | gbp:delete-media | gbp:suggest-reply | gbp:reply | gbp:delete-reply
-ai:captions | ai:image | ai:video-options | ai:video-function | ai:generate-video | ai:video-jobs | ai:video-job
+ai:captions | ai:image | ai:image-jobs | ai:image-job | ai:video-options | ai:video-function | ai:generate-video | ai:video-jobs | ai:video-job
 activity:list | notifications:list | x:quota
 webhooks:list | webhooks:create | webhooks:update | webhooks:delete | webhooks:test
 ```
 
-## Capability Surface (60+)
+## Core MCP Capability Surface
 
 When MCP is available, prefer these tool names directly:
 
@@ -203,57 +206,84 @@ When MCP is available, prefer these tool names directly:
 7. `get_connect_link`
 8. `create_connect_session`
 9. `get_connect_session`
-10. `list_oauth_clients`
-11. `create_oauth_client`
-12. `update_oauth_client`
-13. `delete_oauth_client`
-14. `list_platforms`
-15. `get_platform_schema`
-16. `trigger_platform_helper`
-17. `list_brands`
-18. `get_brand`
-19. `list_brand_accounts`
-20. `get_brand_profile`
-21. `get_learned_voice`
-22. `create_post`
-23. `create_posts_batch`
-24. `list_posts`
-25. `find_available_slot`
-26. `upload_media`
-27. `upload_media_from_url`
-28. `create_signed_upload`
-29. `generate_captions`
-30. `generate_image`
-31. `get_video_options`
-32. `run_video_function`
-33. `generate_video`
-34. `get_video_job`
-35. `get_post`
-36. `get_post_missing`
-37. `ask_support`
-38. `update_post`
-39. `update_post_status`
-40. `update_post_release_id`
-41. `delete_post`
-42. `delete_post_group`
-43. `get_account_analytics`
-44. `get_post_analytics`
-45. `list_google_business_reviews`
-46. `get_google_business_review_link`
-47. `audit_google_business_profile`
-48. `suggest_google_business_review_reply`
-49. `reply_google_business_review`
-50. `delete_google_business_review_reply`
-51. `list_google_business_media`
-52. `add_google_business_media`
-53. `delete_google_business_media`
-54. `list_activity`
-55. `list_webhooks`
-56. `create_webhook`
-57. `update_webhook`
-58. `delete_webhook`
-59. `test_webhook`
-60. `get_x_posting_quota`
+10. `connect_account` - credential-based connect (Telegram, Bluesky, Discord, WordPress, Dev.to, Hashnode, Lemmy)
+11. `list_oauth_clients`
+12. `create_oauth_client`
+13. `update_oauth_client`
+14. `delete_oauth_client`
+15. `list_platforms`
+16. `get_platform_schema`
+17. `trigger_platform_helper`
+18. `list_brands`
+19. `get_brand`
+20. `list_brand_accounts`
+21. `get_brand_profile`
+22. `get_learned_voice`
+23. `validate_post`
+24. `create_post`
+25. `create_posts_batch`
+26. `list_posts`
+27. `find_available_slot`
+28. `upload_media`
+29. `upload_media_from_url`
+30. `create_signed_upload`
+31. `create_media_drop`
+32. `list_media`
+33. `generate_captions`
+34. `generate_image`
+35. `get_image_job`
+36. `get_video_options`
+37. `run_video_function`
+38. `generate_video`
+39. `get_video_job`
+40. `get_post`
+41. `get_post_missing`
+42. `ask_support`
+43. `update_post`
+44. `update_post_status`
+45. `update_post_release_id`
+46. `delete_post`
+47. `delete_post_group`
+48. `get_account_analytics`
+49. `get_post_analytics`
+50. `list_google_business_reviews`
+51. `get_google_business_review_link`
+52. `audit_google_business_profile`
+53. `suggest_google_business_review_reply`
+54. `reply_google_business_review`
+55. `delete_google_business_review_reply`
+56. `list_google_business_media`
+57. `add_google_business_media`
+58. `delete_google_business_media`
+59. `list_activity`
+60. `get_updates` - latest posterly product updates
+61. `list_webhooks`
+62. `create_webhook`
+63. `update_webhook`
+64. `delete_webhook`
+65. `test_webhook`
+66. `get_x_posting_quota`
+67. `get_credits` - AI credit balance; read-only
+68. `get_subscription` - status, tier, period end
+69. `cancel_subscription` - confirm; ask reason first
+70. `pause_subscription` - confirm; 30 days, 90-day cooldown
+71. `resume_subscription` - resume a paused subscription
+72. `downgrade_subscription` - confirm; one tier down at next renewal
+73. `get_performance_profile`
+74. `get_post_insights`
+75. `list_post_suggestions`
+76. `dismiss_suggestion`
+77. `submit_agent_feedback`
+78. `submit_product_feedback`
+79. `list_conversations` - Instagram and Facebook Page DMs; Threads has no DMs; Pro+
+80. `get_conversation`
+81. `send_message` - confirm; Meta 24-hour windows
+82. `list_comments` - Instagram, Facebook Page, Threads, LinkedIn Page
+83. `get_comment`
+84. `reply_to_comment` - confirm; Threads and LinkedIn are public-only
+85. `update_comment` - hide/unhide or mark read; hide is reversible
+86. `sync_inbox` - 30-second cooldown (60s for LinkedIn); Threads and LinkedIn are comments-only
+87. `delete_comment` - confirm; Instagram/Facebook only; Threads hide instead; admin
 
 When MCP is not available, use the CLI command map above or the REST API routes below to access the same posterly capability surface.
 
@@ -355,7 +385,8 @@ Body: FormData with "file" field
 ```
 
 **Supported formats:** JPEG, PNG, GIF, WebP, MP4, MOV, WebM
-**Relay size limit:** decoded file up to 5MB. For larger images/videos, use signed upload.
+**Where the ~4MB limit exists:** Vercel request bodies on posterly API routes (`POST /api/mcp` hosted MCP, `POST /api/v1/media/upload` base64). Base64 inflates the file. Hosted `upload_media` is small images only (relay cap 5MB decoded).
+**Where it does not exist:** `create_signed_upload` then PUT to `upload_url` (object storage, plan video caps 500MB to 4GB); stdio `upload_media` with `file_path`; dashboard composer; `create_media_drop` then a human upload at `/drop/<token>`. Chat paperclips never reach MCP. For ChatGPT web / Claude.ai laptop files, call `create_media_drop`, send `https://www.poster.ly/drop/<token>`, then `list_media`.
 
 **Response:**
 ```json
@@ -370,8 +401,9 @@ For larger files, use the signed upload endpoint:
 POST /api/v1/media/signed-upload
 Body: { "filename": "video.mp4", "content_type": "video/mp4", "size": 15000000 }
 ```
-Returns `upload_url` for direct PUT upload plus `public_url` for use in posts.
-Signed upload supports the plan media limits, including images up to 10MB and videos up to 50MB on standard API plans.
+Returns `upload_url` (object-storage signed PUT URL) plus `public_url` for use in posts.
+PUT the raw bytes to `upload_url` with the returned headers. Do not PUT through a posterly API route.
+Signed-upload plan video caps: Starter 500MB, Pro 750MB, Power 1GB, Agency 4GB.
 
 To fetch a public remote asset into posterly storage:
 ```
@@ -379,6 +411,17 @@ POST /api/v1/media/upload-from-url
 Body: { "url": "https://example.com/photo.jpg", "filename": "photo.jpg" }
 ```
 Localhost/private IP targets and unsafe redirects are blocked.
+
+For ChatGPT web / Claude.ai laptop files, create a human drop page (no dashboard login):
+```
+POST /api/v1/media/drop-sessions
+Body: { "filename": "launch.mp4", "max_files": 1 }
+```
+Returns `drop_url` (`https://www.poster.ly/drop/<token>`), `session_id`, `expires_at`, `max_bytes`. Send the URL to the user. Then:
+```
+GET /api/v1/media?drop_session_id=<session_id>
+```
+Use `list_media` / this GET to read `public_url` for `validate_post` / `create_post`. HEIC and PDF are rejected.
 
 ### 8. Create Post
 ```
@@ -453,6 +496,10 @@ GET /api/v1/posts
 - `sort_by` - `scheduled_at`, `updated_at`, `created_at`
 - `updated_since` - ISO date for incremental sync
 - `created_since` - ISO date filter
+- `approval_status` - `none`, `pending_client`, `approved`, `changes_requested`, `rejected`. `pending_client` means the post is waiting on the client.
+- `brand_id` - filter to posts assigned to a specific brand/client (the id from `GET /api/v1/brands`)
+
+Each returned post carries a read-only `brand_id`, `content_plan_id`, and nested `approval` object (`status`, `asset_status`, `caption_status`, `waiting_on`: `client`/`team`/`null`, `requested_at`, `completed_at`).
 
 **Response:**
 ```json
@@ -534,26 +581,28 @@ POST /api/v1/ai/generate-captions
 
 Generate or adapt brand-aware caption suggestions for one or more platforms. Confirm platforms, brief/source caption, tone, and hashtag strategy before calling it. Uses the AI Caption Assist allowance and returns suggestions only; it does not create, draft, schedule, or publish posts.
 
-### 18. Generate Image
+### 18. Generate Image and Poll Jobs
 ```
 POST /api/v1/ai/generate-image
+GET /api/v1/ai/image-jobs
+GET /api/v1/ai/image-jobs/<job_id>
 ```
 
-Generate an AI image that can be used in a post. Confirm prompt, style, aspect ratio, and whether the user is happy to spend credits before calling it.
+Queue a Nano Banana or Grok Imagine Image 2.0 job and poll until `urls` are available. Confirm provider, prompt, style, aspect ratio, quality or thinking, and credit use before calling `generate_image`. Gemini thinking high does not change the credit price; model and resolution do. Hosted MCP returns `job_id` immediately - poll `get_image_job`. The dashboard, CLI (`ai:image`), and in-browser WebMCP wait for the urls.
 
 ### 19. Get Video Options
 ```
 GET /api/v1/ai/video-options
 ```
 
-Read-only Veo video discovery: models, input modes, durations, resolutions, aspect ratios, and credit-cost estimates. This does not generate video or spend credits.
+Read-only Google Veo and xAI Grok video discovery: models, input modes, durations, resolutions, aspect ratios, and credit-cost estimates. This does not generate video or spend credits.
 
 ### 20. Run Video Function
 ```
 POST /api/v1/ai/video-function
 ```
 
-Run read-only Veo helpers such as `estimate_cost` and `validate_request` before generating. This does not generate video or spend credits.
+Run read-only video provider helpers such as `estimate_cost` and `validate_request` before generating. Use `google_veo` or `xai_grok`. This does not generate video or spend credits.
 
 ### 21. Generate Video and Poll Jobs
 ```
@@ -562,7 +611,7 @@ GET /api/v1/ai/video-jobs
 GET /api/v1/ai/video-jobs/<job_id>
 ```
 
-Queue a cost-guarded Veo job and poll until `video_url` is available. Confirm prompt, model, duration, resolution, aspect ratio, audio setting, and credit cost before calling `generate_video`.
+Queue a cost-guarded Google Veo or xAI Grok Imagine Video 1.5 job and poll until `video_url` is available. Confirm provider, prompt, duration, resolution, aspect ratio, audio setting, and credit cost before calling `generate_video`.
 
 ### 22. Get Account Analytics
 ```
@@ -640,7 +689,22 @@ DELETE /api/v1/webhooks/<webhook_id>
 POST /api/v1/webhooks/<webhook_id>/test
 ```
 
-Use `/activity` for operational history. Use webhooks for unattended workflows that need `post.created`, `post.updated`, `post.publishing`, `post.published`, or `post.failed` events.
+Use `/activity` for operational history. Use webhooks for unattended workflows that need `post.created`, `post.updated`, `post.publishing`, `post.published`, `post.failed`, or the client-approval events `approval.requested`, `approval.approved`, `approval.changes_requested`, `approval.rejected`, `approval.commented`. One client decision is one event carrying every post it touched, not one event per post; `post.updated` is not also sent for an approval change.
+
+### 29. Social Inbox
+```
+GET /api/v1/inbox/conversations
+GET /api/v1/inbox/conversations/<id>
+POST /api/v1/inbox/conversations/<id>/reply
+GET /api/v1/inbox/comments
+GET /api/v1/inbox/comments/<id>
+PATCH /api/v1/inbox/comments/<id>
+DELETE /api/v1/inbox/comments/<id>
+POST /api/v1/inbox/comments/<id>/reply
+POST /api/v1/inbox/sync
+```
+
+Inbox DMs for Instagram and Facebook Pages, and comments for Instagram, Facebook Pages, Threads and LinkedIn Pages (LinkedIn replies are public only). Requires a Pro plan or higher. Reads need `posts:read` and viewer access; replies, hide, and sync need `posts:write` and editor access. Comment delete needs `posts:write` and admin access. Delete is Instagram/Facebook only; Threads replies return 400 (hide instead). There is no CLI inbox command.
 
 ## Supported Platforms (18)
 
@@ -682,11 +746,13 @@ Use `GET /api/v1/platforms` (or `list_platforms` / `platforms:list`) for the liv
 7. Call `GET /api/v1/accounts/<account_id>/schema` before using platform-specific `settings`.
 8. Find available slots to pick optimal posting times.
 9. Upload media if needed (images/videos).
-10. Create post with caption, media, and schedule time.
-11. Use account or post analytics when the user asks how a brand or account is performing.
-12. Use `/activity` or webhooks to monitor publish outcomes.
-13. Use list posts with `status=failed` to catch and retry failures.
-14. Repair missing content or release IDs before a publish window when tools report incomplete posts.
+10. Call `validate_post` or `POST /api/v1/posts` with `dry_run: true` using the complete payload. Resolve validation errors and warnings; dry-run never uploads or reserves media.
+11. Show the final account, caption, schedule, media, settings, and workspace, then obtain explicit confirmation.
+12. Call `create_post` with the same payload and `confirm: true`.
+13. Use account or post analytics when the user asks how a brand or account is performing.
+14. Use `/activity` or webhooks to monitor publish outcomes.
+15. Use list posts with `status=failed` to catch and retry failures. Do not republish posts whose failure needs reconnect, re-upload, or edit and retry; wait-class errors may already be retrying automatically.
+16. When the user asks about DMs or comments, use the inbox MCP tools or `/api/v1/inbox/` (DMs: Instagram and Facebook Pages; comments: Instagram, Facebook Pages, Threads and LinkedIn Pages; Pro+). Confirm before sending a DM, replying, hiding a comment, or deleting a comment. Threads replies cannot be deleted; hide them instead.
 
 ## Tips
 
@@ -698,5 +764,5 @@ Use `GET /api/v1/platforms` (or `list_platforms` / `platforms:list`) for the liv
 - Use `find_available_slot` to avoid scheduling conflicts
 - Stagger posts throughout the day for better reach
 - Use `Idempotency-Key` header when automating to prevent duplicates
-- Monitor `status=failed` posts and retry with corrected content
+- Monitor `status=failed` posts. Inspect the post (and the fail/paused banner in posterly) before retrying. Do not republish reconnect, re-upload, Google Business location-not-found, invalid YouTube keywords, or X URL-cost skips until the user has done that action. Temporary wait errors may already be retrying.
 - Keep captions platform-appropriate (Twitter has character limits, LinkedIn prefers professional tone)

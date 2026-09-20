@@ -82,7 +82,7 @@ node scripts/validate-template.mjs
 Must exit 0. A missing `hooks.json` warning is expected. A missing `mcp.json` warning is not.
 
 - [x] `.cursor-plugin/marketplace.json` is present
-- [x] `plugins/posterly/.cursor-plugin/plugin.json` is valid (name `posterly`, version `1.3.0`, `POSTERLY_API_KEY` variable, no secrets)
+- [x] `plugins/posterly/.cursor-plugin/plugin.json` is valid (name `posterly`, version `1.3.1`, `POSTERLY_API_KEY` variable, no secrets)
 - [x] `node scripts/validate-template.mjs` passes
 - [x] Skill copies stay in sync:
   - `skills/posterly/SKILL.md` identical to `plugins/posterly/skills/posterly/SKILL.md`
