@@ -33,14 +33,6 @@ Add the marketplace, then install the plugin:
 
 When prompted, set your **posterly API key** (plugin userConfig). It is injected into the bundled MCP server as `POSTERLY_API_KEY`.
 
-### Skills CLI (any skill-compatible agent)
-
-```bash
-npx skills add awpthorp/posterly-agent
-```
-
-Or copy [SKILL.md](SKILL.md) into your agent's skills directory manually.
-
 ### Guided setup skill
 
 After the plugin is installed, run:
@@ -50,6 +42,29 @@ After the plugin is installed, run:
 ```
 
 That walkthrough covers API key creation, env/userConfig, `doctor`, and `accounts:list`.
+
+## skills.sh
+
+This repo ships a public **posterly** agent skill for [skills.sh](https://skills.sh/awpthorp/posterly-agent/posterly). It is MCP-first guidance for scheduling and publishing across social platforms, not a second product surface.
+
+The skill teaches when to use hosted MCP and the safe publish loop: `whoami`, list accounts, draft and validate, then schedule or publish with human confirmation on writes.
+
+Install:
+
+```bash
+npx skills add awpthorp/posterly-agent
+```
+
+To install only this skill:
+
+```bash
+npx skills add awpthorp/posterly-agent --skill posterly
+```
+
+Or copy [SKILL.md](SKILL.md) (identical to [skills/posterly/SKILL.md](skills/posterly/SKILL.md)) into your agent's skills directory.
+
+- MCP docs: [poster.ly/mcp](https://www.poster.ly/mcp)
+- Hosted MCP URL: `https://www.poster.ly/api/mcp`
 
 ## Install for Cursor
 
@@ -122,7 +137,8 @@ Agents draft and schedule; people sign off on anything that goes live.
 - CLI: [poster.ly/cli](https://www.poster.ly/cli) ([@posterly/cli on npm](https://www.npmjs.com/package/@posterly/cli))
 - API reference: [poster.ly/reference](https://www.poster.ly/reference)
 - Docs: [poster.ly/docs](https://www.poster.ly/docs)
-- Full tool map: [SKILL.md](SKILL.md)
+- Agent skill: [SKILL.md](SKILL.md) ([skills.sh listing](https://skills.sh/awpthorp/posterly-agent/posterly))
+- Hosted MCP: `https://www.poster.ly/api/mcp`
 - Directory submission checklist: [SUBMISSION.md](SUBMISSION.md)
 
 ## License
