@@ -107,9 +107,27 @@ by another plugin at the same URL.
 
 The portal saved version 1.0.2 on 2026-10-07. Subscription wording and category
 findings cleared; privacy-policy assessment and missing review materials remain.
-OAuth discovery reached the real consent screen and awaits authorization for
-accounts:read, accounts:write, posts:read, posts:write, media:write, analytics:read.
-No consent was granted by the agent without action-time confirmation.
+Alex approved OAuth access at action time. OpenAI now shows authentication
+Authorized, domain verified, and MCP configuration Configured. Discovery
+returned all 61 hosted tools, and both bundled skills passed checks.
+
+The first authenticated scan on 2026-10-07 found 15 tools requiring further
+OpenAI review: manage_workspace_member, manage_publishing_pause, connect_account,
+manage_oauth_client, list_platforms, trigger_platform_helper, submit_product_feedback,
+update_post, run_video_function, manage_google_business_review,
+manage_google_business_media, manage_conversation, manage_comment, manage_webhook,
+and resume_subscription. Their common portal finding is "This tool update needs
+further review before it can go live." This is not an approval or a precise
+implementation diagnosis.
+
+The scan also found update_post incorrectly declares openWorldHint=false. The
+operation can import third-party media and email external reviewers; a shared
+annotation correction is being prepared in the main posterly repository.
+
+The privacy assessment retry returned "We couldn't complete an automated
+assessment of your privacy policy. Feel free to submit for additional review."
+A current walkthrough, isolated reviewer access, execution of all eight cases,
+and developer attestations still remain. No public review submission was made.
 
 After connection, scan tools and resolve findings. Run all eight review cases
 against the exact saved version and record evidence here. Enter reviewer access
