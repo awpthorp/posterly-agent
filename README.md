@@ -90,7 +90,7 @@ node scripts/validate-template.mjs
 ## OpenAI plugin
 
 The ChatGPT and Codex directory package is maintained separately at
-[`openai/posterly/`](openai/posterly/). It connects to the existing posterly hosted
+[`openai/posterly-openai/`](openai/posterly-openai/). It connects to the existing posterly hosted
 MCP server through OAuth. See [OpenAI packaging and review](openai/README.md) for
 the listing, review cases, and ZIP build instructions. Directory review and
 publication are still pending.

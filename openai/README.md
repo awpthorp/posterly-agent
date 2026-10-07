@@ -1,6 +1,6 @@
 # posterly for OpenAI
 
-The OpenAI package lives in `openai/posterly/`. It adapts this repository's
+The OpenAI package lives in `openai/posterly-openai/`. It adapts this repository's
 posterly workflows for ChatGPT and Codex with the existing hosted MCP server
 and OAuth. Its version is independent of the Claude and Cursor packages.
 
@@ -34,7 +34,7 @@ to reviewers; subscription management tools are excluded from the OpenAI profile
 Five positive and three negative cases are in `plugin.json`. They cover account
 discovery, a complete calendar range, account-specific platform requirements,
 timezone-aware slots, a validated post preview, and three unsupported requests.
-All cases are **Not run** against a dedicated reviewer account as of 2026-10-07.
+All cases remain **Not run** against the saved reviewer connection as of 2026-10-07.
 Public discovery confirms hosted MCP 0.49.2 and 61 tools with the three required
 boolean annotations. Public discovery is not authenticated case execution.
 
@@ -48,7 +48,15 @@ sample text post validated successfully for 2026-10-08 at 08:00 Asia/Dubai.
 Validation was a dry run; no post was created or published. These checks use
 the existing development connector, not an isolated saved-version reviewer run.
 
-Prepare a dedicated, isolated reviewer account with:
+A dedicated `openai-review@poster.ly` account and isolated `OpenAI review`
+workspace were created on 2026-10-07. Password sign-in and absence of MFA were
+verified. Complimentary Pro and API access run through 2027-01-05. Credentials
+are stored outside the repository in a local mode-0600 file, and have not been
+shared with OpenAI. No social account is connected to this reviewer workspace.
+The author offered his personal LinkedIn destination; use the normal browser
+connection flow rather than copying provider tokens or exposing his main login.
+
+Complete the reviewer fixture with:
 
 - Active comped subscription and API entitlement for the review period.
 - Password sign-in without MFA, mailbox codes, or private network access.
@@ -132,10 +140,24 @@ webhooks, and subscription management are excluded from this public profile.
 Both annotation corrections apply to the shared catalog. Existing REST access
 checks and preview confirmations continue to enforce permissions and approval.
 
-This package is prepared for MCP 0.50.0. It must not be uploaded or advertised as
-live until PR 1335 is merged and production deployment is verified. The current
-saved portal draft remains 1.0.2 on MCP 0.49.2. The 1.1.0 adapter has not yet been
-scanned in the portal, so no finding is claimed resolved by this source change.
+MCP 0.50.0 is deployed in production from merged PR 1335, commit
+020f42af7464b15287cd88703f3eeb9a396619e7, Vercel deployment
+dpl_6brybX39mbdvRHUs1EysSSusxrvZ. All GitHub checks and approval/security checks
+passed. The npm trusted-publishing workflow also published 0.50.0 and the
+published-version check passed.
+
+OpenAI rejected changing the existing draft's MCP URL. It also rejected changing
+transport headers, and the generic upload automatically reused the existing
+package identity. The OpenAI-only package and MCP key are therefore
+`posterly-openai`; the customer-facing display name remains `posterly` and the
+publisher remains Grassroots Marketing LLC. The existing unpublished 1.0.2 draft
+is retained as a backup. A separate public submission is required for this
+server profile. The header extension PR 1336 was closed without merging because
+it did not address this portal restriction.
+
+A replacement upload is pending. Browser work paused when the Mac locked during
+file selection. No replacement draft, adapter scan, public review submission, or
+publication is claimed yet.
 
 The privacy assessment retry returned "We couldn't complete an automated
 assessment of your privacy policy. Feel free to submit for additional review."

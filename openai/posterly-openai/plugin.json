@@ -1,6 +1,6 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "name": "posterly",
+  "name": "posterly-openai",
   "version": "1.1.0",
   "description": "Draft, validate, schedule, and manage social content across 18 platforms through posterly.",
   "author": {
