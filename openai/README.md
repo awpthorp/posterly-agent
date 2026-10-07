@@ -35,8 +35,9 @@ Five positive and three negative cases are in `plugin.json`. They cover account
 discovery, a complete calendar range, account-specific platform requirements,
 timezone-aware slots, a validated post preview, and three unsupported requests.
 All cases remain **Not run** against the saved reviewer connection as of 2026-10-07.
-Public discovery confirms hosted MCP 0.49.2 and 61 tools with the three required
-boolean annotations. Public discovery is not authenticated case execution.
+The standard hosted catalog retains 61 tools. The replacement submission
+connection discovered the 92-operation OpenAI profile with the required boolean
+annotations. Discovery is not authenticated case execution.
 
 The existing posterly development connection also successfully returned
 `whoami`, `list_accounts`, and `list_platforms` on 2026-10-07. Those read-only
@@ -50,7 +51,10 @@ the existing development connector, not an isolated saved-version reviewer run.
 
 A dedicated `openai-review@poster.ly` account and isolated `OpenAI review`
 workspace were created on 2026-10-07. Password sign-in and absence of MFA were
-verified. Complimentary Pro and API access run through 2027-01-05. Credentials
+verified, including password sign-in through the actual browser dashboard.
+The normal browser onboarding was completed with name OpenAI and timezone
+Asia/Dubai, skipping social connection and first-post creation for now.
+Complimentary Pro and API access run through 2027-01-05. Credentials
 are stored outside the repository in a local mode-0600 file, and have not been
 shared with OpenAI. No social account is connected to this reviewer workspace.
 The author offered his personal LinkedIn destination; use the normal browser
@@ -155,9 +159,49 @@ is retained as a backup. A separate public submission is required for this
 server profile. The header extension PR 1336 was closed without merging because
 it did not address this portal restriction.
 
-A replacement upload is pending. Browser work paused when the Mac locked during
-file selection. No replacement draft, adapter scan, public review submission, or
-publication is claimed yet.
+A replacement version 1.1.0 was uploaded on 2026-10-07 after the Mac was unlocked.
+The saved plugin is `plugin_asdk_app_6ac675cfa8a0819197c6cd0f08b7d264`, draft
+`appsub_6ac675cfa8d0819184bd1d644e4b7c15`. Its public developer is Grassroots
+Marketing LLC and its package name is `posterly-openai`. The setup dialog
+retains the exact URL `https://www.poster.ly/api/mcp?profile=openai`, even though
+the summary displays only the URL without query parameters. OAuth authorization
+and domain verification passed, MCP configuration is Configured, and discovery
+returned all 92 operations. The source identity change was merged in agent
+repository PR 5, commit e885d25173b562fb7918db18a07d5d58bdb2550d.
+
+The replacement scan cleared the original dispatcher, annotation, and manual
+tool findings. It returned seven new duplicate-name findings for the three post
+status variants and four approval variants. OpenAI imports annotation titles as
+display names, and these variants shared titles. Main app PR 1337 appends their
+fixed status or approval action to the title and adds a unique-title regression
+assertion. All checks passed and PR 1337 merged at
+90e340946b9d15c0cc9c50027ca77a36543cecdd. MCP 0.50.1 is live on production
+deployment dpl_DLJcuRU78umMZFm6QRJAs3SxajVQ and on npm, verified by the published
+version check. The complete initial replacement findings are saved locally in
+`dist/openai-profile-findings.json`.
+
+The 0.50.1 rescan cleared duplicate names, but returned description findings for
+create_connect_session and create_post, plus further manual review for
+update_post_status_scheduled. The two descriptions still referenced consolidated
+selectors; the profile must use its own separately declared operation names,
+including nested schema descriptions. A follow-up fix is committed locally on
+main app branch `codex/openai-tool-descriptions`, commit
+29792bc75d3f628632be46dc971eccd736ba7025, version 0.50.2. It clarifies the
+connection handoff and immediate versus scheduled publication, and updates
+description references on copied schemas without mutating the consolidated
+definitions. Profile dispatch tests, MCP build/parity, all staged guards, and
+the production build passed. GitHub rejected three pushes with Internal Server
+Error and an alternate Git-object API upload also failed; no follow-up branch,
+PR, deployment, or npm publication is claimed. Production remains 0.50.1.
+The complete scan is saved in `dist/openai-profile-findings-0.50.1.json`.
+
+Reviewer setup reached the normal LinkedIn Personal connection flow, which asks
+the author to sign in. Alex deferred that sign-in to tomorrow and requested the
+independent preparation be finished first. The browser was returned to the
+reviewer dashboard, so restart the LinkedIn Personal flow there when ready.
+No LinkedIn permission
+grant, connected reviewer social account, sample post, public review submission,
+or publication is claimed yet.
 
 The privacy assessment retry returned "We couldn't complete an automated
 assessment of your privacy policy. Feel free to submit for additional review."
