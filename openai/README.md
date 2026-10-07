@@ -41,7 +41,12 @@ boolean annotations. Public discovery is not authenticated case execution.
 The existing posterly development connection also successfully returned
 `whoami`, `list_accounts`, and `list_platforms` on 2026-10-07. Those read-only
 checks used the author's existing account, not the isolated reviewer account,
-and do not count as saved-version review case results.
+and do not count as saved-version review case results. At Alex's request, further
+read-only developer checks used his existing Alex Thorp LinkedIn connection:
+three Asia/Dubai slots returned, its scheduled-post filter was empty, and the
+sample text post validated successfully for 2026-10-08 at 08:00 Asia/Dubai.
+Validation was a dry run; no post was created or published. These checks use
+the existing development connector, not an isolated saved-version reviewer run.
 
 Prepare a dedicated, isolated reviewer account with:
 
