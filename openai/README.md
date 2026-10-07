@@ -35,6 +35,11 @@ All cases are **Not run** against a dedicated reviewer account as of 2026-10-07.
 Public discovery confirms hosted MCP 0.49.2 and 61 tools with the three required
 boolean annotations. Public discovery is not authenticated case execution.
 
+The existing posterly development connection also successfully returned
+`whoami`, `list_accounts`, and `list_platforms` on 2026-10-07. Those read-only
+checks used the author's existing account, not the isolated reviewer account,
+and do not count as saved-version review case results.
+
 Prepare a dedicated, isolated reviewer account with:
 
 - Active comped subscription and API entitlement for the review period.
