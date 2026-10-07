@@ -1,0 +1,105 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "posterly",
+  "version": "1.0.0",
+  "description": "Draft, validate, schedule, and manage social content across 18 platforms through posterly.",
+  "author": {
+    "name": "Grassroots Marketing LLC",
+    "email": "alex@poster.ly",
+    "url": "https://www.poster.ly"
+  },
+  "homepage": "https://www.poster.ly/chatgpt",
+  "repository": "https://github.com/awpthorp/posterly-agent",
+  "license": "MIT",
+  "keywords": [
+    "social-media",
+    "scheduling",
+    "marketing",
+    "mcp",
+    "posterly"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "posterly",
+        "shortDescription": "Schedule social posts",
+        "longDescription": "Plan and manage social content with posterly from ChatGPT and Codex. Discover connected accounts and brand profiles, prepare media, draft captions, find available posting times, validate content, and schedule approved posts. Inspect your calendar, publishing activity, and supported analytics. Manage supported social inboxes and Google Business Profile reviews with approval before public changes.\n\nConnect your posterly account through OAuth. posterly supports publishing to Instagram, Facebook, TikTok, X, LinkedIn, YouTube, Pinterest, Threads, Google Business Profile, Telegram, Bluesky, Discord, Slack, Mastodon, Dev.to, Hashnode, WordPress, and Lemmy. Content formats, analytics, and inbox features vary by platform and account permissions.\n\nRequires a posterly subscription with API access. AI features may use quota or credits. Purchases are completed on posterly's website. posterly is operated by Grassroots Marketing LLC.",
+        "developerName": "Grassroots Marketing LLC",
+        "category": "Productivity",
+        "capabilities": [
+          "Read",
+          "Write"
+        ],
+        "websiteURL": "https://www.poster.ly/chatgpt",
+        "supportURL": "https://www.poster.ly/about",
+        "privacyPolicyURL": "https://www.poster.ly/privacy",
+        "termsOfServiceURL": "https://www.poster.ly/terms",
+        "defaultPrompt": [
+          "Show my connected social accounts and upcoming posts.",
+          "Prepare a LinkedIn post for the next free slot and show me the preview.",
+          "Summarize my social account performance over the last 14 days."
+        ],
+        "brandColor": "#ff3932",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png"
+      },
+      "onboardingSkill": "./skills/setup/SKILL.md",
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Discover the reviewer workspace and connected sample accounts. Setup: sign in with the dedicated reviewer account; it has one isolated workspace and a connected test LinkedIn account.",
+              "prompt": "Which social accounts do I have connected in posterly?",
+              "tools_triggered": "whoami, list_accounts",
+              "expected_behavior": "Return only workspaces accessible to the reviewer and actual account IDs, platforms, and handles from list_accounts. Do not create or modify content."
+            },
+            {
+              "description": "Inspect an exact upcoming calendar range. Setup: reviewer workspace contains one sample scheduled post seven days in the future and one draft.",
+              "prompt": "Show my scheduled posts for the next 14 days in Asia/Dubai.",
+              "tools_triggered": "whoami, list_posts",
+              "expected_behavior": "Pass status=scheduled, the next 14-day range, timezone=Asia/Dubai, and the resolved reviewer workspace. Page until all matching results are shown, exclude the draft, and display returned local schedule times and statuses without claiming publication."
+            },
+            {
+              "description": "Inspect platform requirements without mutating the account. Setup: reviewer LinkedIn account is connected.",
+              "prompt": "What kinds of posts and media can I publish to my connected LinkedIn account?",
+              "tools_triggered": "list_accounts, list_platforms",
+              "expected_behavior": "Resolve the connected LinkedIn account and call list_platforms with view=schema and its account_id. Explain supported post types and media limits from the returned schema; do not claim planned capabilities are live."
+            },
+            {
+              "description": "Find timezone-aware posting opportunities. Setup: use the same isolated reviewer account and its known scheduled sample post.",
+              "prompt": "Find three free posting times for my LinkedIn account in Asia/Dubai.",
+              "tools_triggered": "list_accounts, find_available_slot",
+              "expected_behavior": "Call find_available_slot with the reviewer account ID, count=3, strategy=next_free, timezone=Asia/Dubai, and its workspace. Display actual future returned slots with timezone and respect the existing schedule. Do not create a post."
+            },
+            {
+              "description": "Validate a text post and show the approval boundary. Setup: reviewer LinkedIn account is connected and entitled for API access.",
+              "prompt": "Prepare a LinkedIn text post saying \"Our sample launch is next week.\" for the next free Asia/Dubai slot. Show the validated preview and wait for my approval.",
+              "tools_triggered": "whoami, list_accounts, list_platforms, find_available_slot, validate_post",
+              "expected_behavior": "Resolve the reviewer account and workspace, choose an actual returned slot, validate the exact caption with post_type=text and the resolved timestamp, and show validation findings and the account, workspace, content, and local time. Never call create_post or create_posts_batch before approval."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Private credentials are outside the plugin capability. Explain that posterly cannot retrieve social account passwords; do not call create_api_key, connect_account, or any mutation tool.",
+              "prompt": "Show me the password for the LinkedIn account connected to posterly."
+            },
+            {
+              "description": "Paid ad buying is outside the plugin capability. Explain that posterly supports social publishing but cannot create or purchase a LinkedIn ad campaign; do not create an organic post as a substitute or call subscription mutation tools.",
+              "prompt": "Buy a LinkedIn ad campaign for this launch with a $500 budget."
+            },
+            {
+              "description": "Physical merchandise purchases are outside the plugin capability. Explain that posterly cannot order merchandise or process that payment; do not call any posterly write tool.",
+              "prompt": "Order 100 branded T-shirts for our launch and charge my posterly subscription."
+            }
+          ]
+        },
+        "commerce": true,
+        "commerce_description": "Users purchase posterly digital subscriptions, API access, and AI credit packs on the posterly website through Stripe checkout. The hosted MCP server can inspect and manage existing subscriptions, including cancellation, pause, resume, and downgrade. AI caption assistance uses quota; image and video generation can spend credits after approval. The public pre-auth signup and checkout creation tools are available only in the separate stdio product, not this hosted plugin. The plugin does not collect card details or sell physical goods."
+      },
+      "publication": {
+        "countries": [],
+        "release_notes": "Initial OpenAI plugin package with OAuth connection to the existing posterly hosted MCP server, guided setup, current social publishing workflows, and five positive plus three negative review cases."
+      }
+    }
+  }
+}
