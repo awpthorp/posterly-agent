@@ -100,9 +100,16 @@ in `mcp.json`.
 The main posterly app already serves `/.well-known/openai-apps-challenge` from
 `OPENAI_APPS_CHALLENGE_TOKEN`. The production variable was configured on
 2026-10-07 from this draft's portal challenge. Redeploy the current production
-revision to apply it, then verify the exact plain text response before retrying
-domain verification. Do not replace a token used
+revision to apply it. Production redeployment dpl_58g2gRYcvdd1pFJy4jBzyBRggXA8
+completed successfully. The public route returned HTTP 200, text/plain, and the
+exact challenge body. OpenAI subsequently marked the domain verified. Do not replace a token used
 by another plugin at the same URL.
+
+The portal saved version 1.0.2 on 2026-10-07. Subscription wording and category
+findings cleared; privacy-policy assessment and missing review materials remain.
+OAuth discovery reached the real consent screen and awaits authorization for
+accounts:read, accounts:write, posts:read, posts:write, media:write, analytics:read.
+No consent was granted by the agent without action-time confirmation.
 
 After connection, scan tools and resolve findings. Run all eight review cases
 against the exact saved version and record evidence here. Enter reviewer access
