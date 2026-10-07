@@ -27,7 +27,7 @@ currently prohibits digital commerce through plugins. This package permits exist
 users to use their included entitlements and prohibits checkout links, new
 subscriptions, upgrades, and credit purchases. Informational entitlement links
 are allowed. The commerce disclosure remains true to disclose the paid service
-and existing subscription management tools to reviewers.
+to reviewers; subscription management tools are excluded from the OpenAI profile.
 
 ## Review preparation
 
@@ -116,22 +116,26 @@ Alex approved OAuth access at action time. OpenAI now shows authentication
 Authorized, domain verified, and MCP configuration Configured. Discovery
 returned all 61 hosted tools, and both bundled skills passed checks.
 
-The first authenticated scan on 2026-10-07 found 15 tools requiring further
-OpenAI review: manage_workspace_member, manage_publishing_pause, connect_account,
-manage_oauth_client, list_platforms, trigger_platform_helper, submit_product_feedback,
-update_post, run_video_function, manage_google_business_review,
-manage_google_business_media, manage_conversation, manage_comment, manage_webhook,
-and resume_subscription. Their common portal finding is "This tool update needs
-further review before it can go live." This is not an approval or a precise
-implementation diagnosis.
+The first authenticated scan on 2026-10-07 flagged 15 tools. Eleven findings
+require callable operations to be exposed separately, two require truthful
+openWorldHint annotations (update_post and submit_product_feedback), and three
+require further manual review (connect_account, update_post, resume_subscription).
+update_post has two findings. The initial summary incorrectly described all
+findings as manual review; the complete report was subsequently inspected.
 
-The scan also found update_post incorrectly declares openWorldHint=false. The
-operation can import third-party media and email external reviewers; a shared
-annotation correction is ready in
-https://github.com/awpthorp/posterly/pull/1335. Hosted and stdio annotation tests,
-registry design, version parity, agent-surface checks, and the required
-production build passed. It will take effect after merge, deployment, and
-the npm release. The current live scan still uses 0.49.2.
+Version 1.1.0 targets `/api/mcp?profile=openai`. Main app PR
+https://github.com/awpthorp/posterly/pull/1335 adds this profile: 92 fixed
+operations derived from the existing registry, with no generic dispatcher or
+legacy alias fallback. The normal hosted 61-tool and stdio 64-tool catalogs
+remain consolidated. Direct credential entry, credential administration,
+webhooks, and subscription management are excluded from this public profile.
+Both annotation corrections apply to the shared catalog. Existing REST access
+checks and preview confirmations continue to enforce permissions and approval.
+
+This package is prepared for MCP 0.50.0. It must not be uploaded or advertised as
+live until PR 1335 is merged and production deployment is verified. The current
+saved portal draft remains 1.0.2 on MCP 0.49.2. The 1.1.0 adapter has not yet been
+scanned in the portal, so no finding is claimed resolved by this source change.
 
 The privacy assessment retry returned "We couldn't complete an automated
 assessment of your privacy policy. Feel free to submit for additional review."

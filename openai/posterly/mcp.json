@@ -3,7 +3,7 @@
   "mcpServers": {
     "posterly": {
       "type": "streamable-http",
-      "url": "https://www.poster.ly/api/mcp"
+      "url": "https://www.poster.ly/api/mcp?profile=openai"
     }
   }
 }

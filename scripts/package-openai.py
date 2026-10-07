@@ -23,7 +23,7 @@ def validate(files):
     assert mcp["$schema"] == "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
     assert set(mcp["mcpServers"]) == {"posterly"}
     assert mcp["mcpServers"]["posterly"] == {
-        "type": "streamable-http", "url": "https://www.poster.ly/api/mcp"
+        "type": "streamable-http", "url": "https://www.poster.ly/api/mcp?profile=openai"
     }
     extension = manifest["extensions"]["com.openai"]
     assert "apps" not in manifest and "apps" not in extension
