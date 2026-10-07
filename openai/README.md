@@ -127,7 +127,11 @@ implementation diagnosis.
 
 The scan also found update_post incorrectly declares openWorldHint=false. The
 operation can import third-party media and email external reviewers; a shared
-annotation correction is being prepared in the main posterly repository.
+annotation correction is ready in
+https://github.com/awpthorp/posterly/pull/1335. Hosted and stdio annotation tests,
+registry design, version parity, agent-surface checks, and the required
+production build passed. It will take effect after merge, deployment, and
+the npm release. The current live scan still uses 0.49.2.
 
 The privacy assessment retry returned "We couldn't complete an automated
 assessment of your privacy policy. Feel free to submit for additional review."
