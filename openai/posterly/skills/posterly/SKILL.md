@@ -24,7 +24,8 @@ its current schemas take precedence over examples in this skill.
    platform view. Planned platforms are not supported publishing destinations.
 4. If authentication fails, direct the user to connect or reconnect posterly
    through the host's OAuth flow. For missing API entitlement, give the returned
-   posterly billing link and explain the requirement. Never retry a denied call
+   requirement neutrally. Link only to a verified informational entitlement
+   page that does not initiate a purchase. Do not follow returned checkout or upgrade links. Never retry a denied call
    with different credentials or fabricate a successful result.
 
 ## Draft, validate, and schedule
@@ -92,8 +93,10 @@ unchanged action that the user approved. Do not fabricate preview tokens.
 For AI image or video generation, explain the returned options and credit cost,
 obtain approval, then submit the requested job. Poll `list_jobs` and distinguish
 queued, running, completed, and failed jobs. Never claim media exists while a
-job is still running. Do not collect payment information; paid purchases happen
-in posterly's website checkout.
+job is still running. Use existing quota or credits only. Do not collect payment
+information, display subscription offers, initiate new subscriptions or upgrades,
+sell credit packs, or link to checkout, even when a user requests it. Explain
+unavailable entitlements neutrally and link only to an informational plans page.
 
 ## Limits
 

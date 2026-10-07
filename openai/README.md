@@ -22,9 +22,12 @@ support contact, Privacy Policy, and Terms of Service. The 512 px transparent
 icon is the existing posterly app icon. Grassroots Marketing LLC is the
 publisher selected by Alex. Country targeting is all available countries.
 
-Purchases are for digital subscriptions, API access, and AI credit packs through
-posterly's website. Hosted MCP subscription tools manage existing subscriptions;
-the public pre-auth signup tools belong to the separate stdio product.
+The service sells subscriptions and credits independently on its website. OpenAI
+currently prohibits digital commerce through plugins. This package permits existing
+users to use their included entitlements and prohibits checkout links, new
+subscriptions, upgrades, and credit purchases. Informational entitlement links
+are allowed. The commerce disclosure remains true to disclose the paid service
+and existing subscription management tools to reviewers.
 
 ## Review preparation
 
@@ -87,16 +90,17 @@ currently labels its business identity `Grassroots`; confirm that verified
 identity belongs to Grassroots Marketing LLC and inspect the imported public
 developer name. Package author text cannot override a verified identity.
 
-Upload the ZIP after preparing review materials, or upload an incomplete draft
-only when explicitly requested. Check the imported listing and skills, then
+An incomplete 1.0.0 draft was uploaded on 2026-10-07 at Alex's request.
+Version 1.0.1 removes subscription wording from the listing and restricts digital
+commerce guidance following the portal checks. Check the imported listing and skills, then
 connect `https://www.poster.ly/api/mcp` with OAuth. No static bearer secret belongs
 in `mcp.json`.
 
 The main posterly app already serves `/.well-known/openai-apps-challenge` from
-`OPENAI_APPS_CHALLENGE_TOKEN`. It currently returns 404 while that variable is
-unset. Set the exact portal challenge in the existing Vercel production project
-and deploy through the established release flow, then verify the exact plain
-text response before retrying domain verification. Do not replace a token used
+`OPENAI_APPS_CHALLENGE_TOKEN`. The production variable was configured on
+2026-10-07 from this draft's portal challenge. Redeploy the current production
+revision to apply it, then verify the exact plain text response before retrying
+domain verification. Do not replace a token used
 by another plugin at the same URL.
 
 After connection, scan tools and resolve findings. Run all eight review cases

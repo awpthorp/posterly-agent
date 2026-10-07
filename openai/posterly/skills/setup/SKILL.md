@@ -11,8 +11,9 @@ description: Connect posterly through OAuth, check accessible workspaces and soc
    Never ask the user to paste an API key or password into chat.
 3. Read the returned workspace permissions and onboarding state. If posterly
    reports missing subscription or API access, explain the returned requirement
-   and open its website billing link only when the user wants to continue.
-   Never initiate a paid purchase without explicit authorization.
+   neutrally. Link only to a verified informational entitlement page that does
+   not initiate a purchase. Never display subscription offers, initiate new subscriptions
+   or upgrades, sell credit packs, or link to checkout, even if requested.
 4. Call `list_accounts`. If no account is connected, use `list_platforms` with
    `view: connect_link` or `create_connect_session` for the user's chosen
    platform. Guide the browser handoff. Poll using `list_accounts` with

@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "posterly",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Draft, validate, schedule, and manage social content across 18 platforms through posterly.",
   "author": {
     "name": "Grassroots Marketing LLC",
@@ -23,7 +23,7 @@
       "interface": {
         "displayName": "posterly",
         "shortDescription": "Schedule social posts",
-        "longDescription": "Plan and manage social content with posterly from ChatGPT and Codex. Discover connected accounts and brand profiles, prepare media, draft captions, find available posting times, validate content, and schedule approved posts. Inspect your calendar, publishing activity, and supported analytics. Manage supported social inboxes and Google Business Profile reviews with approval before public changes.\n\nConnect your posterly account through OAuth. posterly supports publishing to Instagram, Facebook, TikTok, X, LinkedIn, YouTube, Pinterest, Threads, Google Business Profile, Telegram, Bluesky, Discord, Slack, Mastodon, Dev.to, Hashnode, WordPress, and Lemmy. Content formats, analytics, and inbox features vary by platform and account permissions.\n\nRequires a posterly subscription with API access. AI features may use quota or credits. Purchases are completed on posterly's website. posterly is operated by Grassroots Marketing LLC.",
+        "longDescription": "Plan and manage social content with posterly from ChatGPT and Codex. Discover connected accounts and brand profiles, prepare media, draft captions, find available posting times, validate content, and schedule approved posts. Inspect your calendar, publishing activity, and supported analytics. Manage supported social inboxes and Google Business Profile reviews with approval before public changes.\n\nConnect your posterly account through OAuth. posterly supports publishing to Instagram, Facebook, TikTok, X, LinkedIn, YouTube, Pinterest, Threads, Google Business Profile, Telegram, Bluesky, Discord, Slack, Mastodon, Dev.to, Hashnode, WordPress, and Lemmy. Content formats, analytics, and inbox features vary by platform and account permissions.\n\nposterly is operated by Grassroots Marketing LLC.",
         "developerName": "Grassroots Marketing LLC",
         "category": "Productivity",
         "capabilities": [
@@ -94,7 +94,7 @@
           ]
         },
         "commerce": true,
-        "commerce_description": "Users purchase posterly digital subscriptions, API access, and AI credit packs on the posterly website through Stripe checkout. The hosted MCP server can inspect and manage existing subscriptions, including cancellation, pause, resume, and downgrade. AI caption assistance uses quota; image and video generation can spend credits after approval. The public pre-auth signup and checkout creation tools are available only in the separate stdio product, not this hosted plugin. The plugin does not collect card details or sell physical goods."
+        "commerce_description": "The service sells digital subscriptions, API access, and AI credit packs independently on the posterly website. This plugin is limited to existing users and their included entitlements. It must not sell digital products, initiate purchases or upgrades, display subscription offers, or link to checkout. Hosted MCP tools can inspect or manage an existing subscription; AI tools consume existing quota or credits only after approval. Pre-auth signup and checkout creation tools belong to the separate stdio product and are not exposed by this hosted plugin. No card data is collected by the plugin."
       },
       "publication": {
         "countries": [],
