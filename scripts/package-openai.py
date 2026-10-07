@@ -11,18 +11,18 @@ from urllib.parse import urlparse
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "openai" / "posterly"
+SOURCE = ROOT / "openai" / "posterly-openai"
 
 
 def validate(files):
     manifest = json.loads(files["plugin.json"])
     mcp = json.loads(files["mcp.json"])
-    assert manifest["name"] == "posterly"
+    assert manifest["name"] == "posterly-openai"
     assert re.fullmatch(r"\d+\.\d+\.\d+", manifest["version"])
     assert manifest["$schema"] == "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
     assert mcp["$schema"] == "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
-    assert set(mcp["mcpServers"]) == {"posterly"}
-    assert mcp["mcpServers"]["posterly"] == {
+    assert set(mcp["mcpServers"]) == {"posterly-openai"}
+    assert mcp["mcpServers"]["posterly-openai"] == {
         "type": "streamable-http", "url": "https://www.poster.ly/api/mcp?profile=openai"
     }
     extension = manifest["extensions"]["com.openai"]
@@ -95,9 +95,9 @@ args.output.mkdir(parents=True, exist_ok=True)
 archive = args.output / ("posterly-openai-" + manifest["version"] + ".zip")
 with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as output:
     for name, content in files.items():
-        output.writestr("posterly/" + name, content)
+        output.writestr(SOURCE.name + "/" + name, content)
 with zipfile.ZipFile(archive) as output:
-    packaged = {name.removeprefix("posterly/"): output.read(name) for name in output.namelist()}
+    packaged = {name.removeprefix(SOURCE.name + "/"): output.read(name) for name in output.namelist()}
     validate(packaged)
     assert packaged == files
 print(archive)
