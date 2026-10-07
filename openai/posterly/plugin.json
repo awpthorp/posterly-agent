@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "posterly",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Draft, validate, schedule, and manage social content across 18 platforms through posterly.",
   "author": {
     "name": "Grassroots Marketing LLC",
@@ -25,7 +25,7 @@
         "shortDescription": "Schedule social posts",
         "longDescription": "Plan and manage social content with posterly from ChatGPT and Codex. Discover connected accounts and brand profiles, prepare media, draft captions, find available posting times, validate content, and schedule approved posts. Inspect your calendar, publishing activity, and supported analytics. Manage supported social inboxes and Google Business Profile reviews with approval before public changes.\n\nConnect your posterly account through OAuth. posterly supports publishing to Instagram, Facebook, TikTok, X, LinkedIn, YouTube, Pinterest, Threads, Google Business Profile, Telegram, Bluesky, Discord, Slack, Mastodon, Dev.to, Hashnode, WordPress, and Lemmy. Content formats, analytics, and inbox features vary by platform and account permissions.\n\nposterly is operated by Grassroots Marketing LLC.",
         "developerName": "Grassroots Marketing LLC",
-        "category": "Productivity",
+        "category": "Business & Operations",
         "capabilities": [
           "Read",
           "Write"

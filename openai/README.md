@@ -92,7 +92,8 @@ developer name. Package author text cannot override a verified identity.
 
 An incomplete 1.0.0 draft was uploaded on 2026-10-07 at Alex's request.
 Version 1.0.1 removes subscription wording from the listing and restricts digital
-commerce guidance following the portal checks. Check the imported listing and skills, then
+commerce guidance following the portal checks. Version 1.0.2 selects the supported
+Business & Operations category for its social marketing workflows. Check the imported listing and skills, then
 connect `https://www.poster.ly/api/mcp` with OAuth. No static bearer secret belongs
 in `mcp.json`.
 
