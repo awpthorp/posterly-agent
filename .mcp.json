@@ -1,8 +1,10 @@
 {
   "mcpServers": {
     "posterly": {
-      "command": "npx",
-      "args": ["-y", "posterly-mcp-server@0.50.3"],
+      "command": "node",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/node_modules/posterly-mcp-server/dist/index.js"
+      ],
       "env": {
         "POSTERLY_API_KEY": "${user_config.api_key}"
       }

@@ -59,3 +59,7 @@ Verify the exact version appears as latest in the public registry API. Keep old 
 - Glama and Smithery already have public listings; update existing records rather than creating duplicates.
 
 Never commit API keys, reviewer credentials, private logs, or customer data. Reviewer access for one directory does not authorize sharing credentials with another.
+
+## Claude locked runtime
+
+Release 1.3.4 declares MCP 0.50.3 in the root package.json and package-lock.json. Claude installs those frozen dependencies without lifecycle scripts when it copies the plugin into its cache. The local server runs the installed Node entry point and gets its key from the sensitive userConfig option. For a local path install, run npm ci --ignore-scripts first. Cursor and Gemini retain their exactly pinned npx launchers.
