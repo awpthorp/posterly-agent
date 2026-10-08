@@ -2,7 +2,7 @@
 
 ## Current package
 
-The Claude, Cursor, and Gemini CLI packages use version 1.3.3 and pin `posterly-mcp-server@0.50.4`. CLI fallbacks pin `@posterly/cli@0.1.5`. The OpenAI package has its own version and release process under `openai/`.
+The Claude, Cursor, and Gemini CLI packages use version 1.3.5 and pin `posterly-mcp-server@0.50.4`. CLI fallbacks pin `@posterly/cli@0.1.5`. The OpenAI package has its own version and release process under `openai/`.
 
 Run from this repository root before every release:
 
