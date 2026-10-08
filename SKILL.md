@@ -1,12 +1,11 @@
 ---
 name: posterly
 description: >-
-  Use Posterly MCP to schedule and publish social posts across connected
+  Use posterly MCP to schedule and publish social posts across connected
   platforms (Instagram, TikTok, LinkedIn, YouTube, X, Facebook, Threads,
   Pinterest, Google Business Profile, and others). Use when the user wants
   to list accounts, draft or validate a post, schedule or publish, or
   manage social publishing through hosted MCP rather than a dashboard.
-allowed-tools: Bash(npx:*) Bash(posterly:*)
 metadata:
   openclaw:
     requires:
@@ -24,7 +23,7 @@ metadata:
 
 # posterly
 
-Agent skill for the Posterly hosted MCP. Prefer MCP tools over inventing REST or CLI calls. Live tool schemas are the source of truth.
+Agent skill for the posterly hosted MCP. Prefer MCP tools over inventing REST or CLI calls. Live tool schemas are the source of truth.
 
 Use this skill when the user wants to schedule or publish social posts, list connected accounts, or validate a draft before it goes live.
 
@@ -38,17 +37,17 @@ Use hosted MCP when the runtime can call MCP tools (Claude Code plugin, Cursor, 
 
 Do not invent a second product surface, UI, Autopilot, or a live Claude Connectors listing. If MCP tools are missing, point the user at the MCP docs rather than pasting a long REST map.
 
-Local stdio is optional: `npx -y posterly-mcp-server@latest` with `POSTERLY_API_KEY` in the environment. Claude Code plugins that ship this package can load MCP from `.mcp.json` using plugin `userConfig.api_key`.
+Local stdio is optional: `npx -y posterly-mcp-server@0.50.3` with `POSTERLY_API_KEY` in the environment. Claude Code plugins that ship this package can load MCP from `.mcp.json` using plugin `userConfig.api_key`.
 
 ## Auth
 
-API and MCP access need a paid Posterly plan plus the API add-on.
+API and MCP access need a paid posterly plan with API access. Starter + API is available from $10/month; check current pricing on the signup page.
 
 - Environment: `POSTERLY_API_KEY` (starts with `pst_live_`)
 - Claude plugin: `userConfig.api_key`, injected as `POSTERLY_API_KEY`
 - Header: `Authorization: Bearer <POSTERLY_API_KEY>`
 
-If the key is missing, send the user to https://www.poster.ly/mcp or https://www.poster.ly/agents/signup. Do not collect card numbers, Posterly passwords, or social passwords. Do not invent a signup flow.
+If the key is missing, send the user to https://www.poster.ly/mcp or https://www.poster.ly/agents/signup. Do not collect card numbers, posterly passwords, or social passwords. Do not invent a signup flow.
 
 Never start signup if `whoami` already works. Never ask the user to paste a key they already have.
 
@@ -100,7 +99,7 @@ Tell the user the post was created, share any dashboard link the tool returned, 
 
 ## Fallback
 
-If MCP is unavailable and the user has a shell, `npx -y @posterly/cli@latest` uses the same key. Prefer MCP when tools are present.
+If MCP is unavailable and the user has a shell, `npx -y @posterly/cli@0.1.5` uses the same key. Prefer MCP when tools are present.
 
 ## Links
 

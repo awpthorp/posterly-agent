@@ -9,9 +9,9 @@ Use this command when the user runs `/setup` or asks to connect posterly in Curs
 
 ## First run
 
-Probe once. If MCP `whoami` or `npx -y @posterly/cli@latest doctor --pretty` succeeds, skip onboarding. Never start signup. Never ask the user to paste a key they already have. Prefer MCP tools for day-to-day work after the probe succeeds.
+Probe once. If MCP `whoami` or `npx -y @posterly/cli@0.1.5 doctor --pretty` succeeds, skip onboarding. Never start signup. Never ask the user to paste a key they already have. Prefer MCP tools for day-to-day work after the probe succeeds.
 
-If the probe fails, posterly is a social scheduler. API and MCP access need a paid plan plus the $3/mo API add-on. Never collect card numbers, posterly passwords, or social passwords. Payment and password setup stay in the user's browser.
+If the probe fails, posterly is a social scheduler. API and MCP access need a paid plan with API access. Starter + API is available from $10/month; check current pricing on the signup page. Never collect card numbers, posterly passwords, or social passwords. Payment and password setup stay in the user's browser.
 
 Signup APIs never return a `pst_live_` key. Do not dump raw JSON. Narrate progress in plain language.
 
@@ -26,8 +26,8 @@ Signup APIs never return a `pst_live_` key. Do not dump raw JSON. Narrate progre
 ### Path 2: CLI login (shell, existing or new account)
 
 ```bash
-npx -y @posterly/cli@latest auth:login
-npx -y @posterly/cli@latest doctor --pretty
+npx -y @posterly/cli@0.1.5 auth:login
+npx -y @posterly/cli@0.1.5 doctor --pretty
 ```
 
 ### Path 3: human pages
