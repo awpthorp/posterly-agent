@@ -34,7 +34,10 @@ to reviewers; subscription management tools are excluded from the OpenAI profile
 Five positive and three negative cases are in `plugin.json`. They cover account
 discovery, saved draft retrieval, account-specific platform requirements,
 timezone-aware slots, a validated post preview, and three unsupported requests.
-All cases remain **Not run** against the reviewer connection as of 2026-10-08.
+All eight cases passed their observable outcomes in ChatGPT Work and standard
+ChatGPT on 2026-10-08 using the isolated reviewer connection. See
+`review-results-2026-10-08.md` for
+actual calls, the initial timing failure, and the limits of that evidence.
 The draft-retrieval case uses the actual saved fixture. No queued post is required
 for these read and validation cases; do not schedule a real public test post.
 The standard hosted catalog retains 61 tools. The replacement submission
@@ -87,9 +90,12 @@ Use a development plugin connection to `/api/mcp?profile=openai` in ChatGPT
 and the dedicated reviewer account. The original consolidated development
 connection is preserved. A matching OpenAI review test connection was created on 2026-10-08 as
 `plugin_asdk_app_6ac73a3b5a948191adc4ca85a76d9b29`. Its reviewer OAuth grant
-is pending; no case execution is claimed. The recipient and six requested
-scopes match the existing ChatGPT connector. Approve only the intended
-reviewer connection, not an unrelated account. Start the user's screen recorder with only that
+was authorized by Alex and completed on 2026-10-08. A stale initial consent
+request expired; restarting the same grant succeeded. The recipient and six
+requested scopes match the existing ChatGPT connector. All eight scenarios
+were then exercised in ChatGPT Work and standard ChatGPT. This development connection tests the
+OpenAI MCP profile; it does not install the two packaged skills or publish the
+saved portal draft. Start the user's screen recorder with only that
 window visible. Demonstrate:
 
 1. OAuth connection and account discovery using positive case 1.
@@ -232,17 +238,19 @@ processing, the published-version check passed and the latest tag was
 verified as 0.50.3. Both hosted and npm releases are complete.
 
 LinkedIn connection, a saved draft, and the workspace publishing pause are
-verified. ChatGPT reviewer OAuth approval is pending. The draft source version
+verified. ChatGPT reviewer OAuth completed, and the eight scenarios on both
+ChatGPT surfaces have recorded outcomes. The draft source version
 1.1.2 updates test fixtures accordingly; it has no demo URL and has not been
 uploaded. The portal remains on 1.1.0, unsubmitted and unpublished.
 
 The privacy assessment retry returned "We couldn't complete an automated
 assessment of your privacy policy. Feel free to submit for additional review."
-A current walkthrough, isolated reviewer access, execution of all eight cases,
-and developer attestations still remain. No public review submission was made.
+A current walkthrough, secure reviewer credential disclosure, verification of
+the final package instructions, and developer attestations still remain. No
+public review submission was made.
 
-After connection, scan tools and resolve findings. Run all eight review cases
-against the exact saved version and record evidence here. Enter reviewer access
+Preserve the clear tool scan. Complete host verification, record the walkthrough,
+and upload the complete package with its actual video URL. Enter reviewer access
 in the secure form. Submission for review and publication are separate actions.
 The authorized developer must complete legal and policy attestations.
 
