@@ -72,3 +72,7 @@ Confirm with the user before:
 - MCP: https://www.poster.ly/mcp
 - CLI: https://www.poster.ly/cli
 - Docs: https://www.poster.ly/docs
+
+## Claude directory scope
+
+Claude directory installs set `POSTERLY_DIRECTORY_PROFILE=claude` and use `https://www.poster.ly/api/mcp?profile=claude` for hosted connections. In this profile, AI image, video, and audio generation, billing mutations, and legacy tool aliases are unavailable. Do not switch profiles or use CLI or REST fallbacks for excluded operations. Use canonical live tool schemas and their view or action selectors. Other clients retain the standard catalog.

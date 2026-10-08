@@ -6,7 +6,8 @@
         "${CLAUDE_PLUGIN_ROOT}/node_modules/posterly-mcp-server/dist/index.js"
       ],
       "env": {
-        "POSTERLY_API_KEY": "${user_config.api_key}"
+        "POSTERLY_API_KEY": "${user_config.api_key}",
+        "POSTERLY_DIRECTORY_PROFILE": "claude"
       }
     }
   }

@@ -1,13 +1,13 @@
 {
   "name": "posterly",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "description": "Schedule, validate, and analyze social posts across 18 platforms with posterly.",
   "mcpServers": {
     "posterly": {
       "command": "npx",
       "args": [
         "-y",
-        "posterly-mcp-server@0.50.3"
+        "posterly-mcp-server@0.50.4"
       ],
       "env": {
         "POSTERLY_API_KEY": "${POSTERLY_API_KEY}"

@@ -2,7 +2,7 @@
 
 ## Current package
 
-The Claude, Cursor, and Gemini CLI packages use version 1.3.3 and pin `posterly-mcp-server@0.50.3`. CLI fallbacks pin `@posterly/cli@0.1.5`. The OpenAI package has its own version and release process under `openai/`.
+The Claude, Cursor, and Gemini CLI packages use version 1.3.3 and pin `posterly-mcp-server@0.50.4`. CLI fallbacks pin `@posterly/cli@0.1.5`. The OpenAI package has its own version and release process under `openai/`.
 
 Run from this repository root before every release:
 
@@ -62,4 +62,10 @@ Never commit API keys, reviewer credentials, private logs, or customer data. Rev
 
 ## Claude locked runtime
 
-Release 1.3.4 declares MCP 0.50.3 in the root package.json and package-lock.json. Claude installs those frozen dependencies without lifecycle scripts when it copies the plugin into its cache. The local server runs the installed Node entry point and gets its key from the sensitive userConfig option. For a local path install, run npm ci --ignore-scripts first. Cursor and Gemini retain their exactly pinned npx launchers.
+Release 1.3.5 declares MCP 0.50.4 in the root package.json and package-lock.json. Claude installs those frozen dependencies without lifecycle scripts when it copies the plugin into its cache. The local server runs the installed Node entry point and gets its key from the sensitive userConfig option. For a local path install, run npm ci --ignore-scripts first. Cursor and Gemini retain their exactly pinned npx launchers.
+
+## Claude directory scope
+
+The Claude marketplace entry explicitly loads `claude-skills/posterly` and `claude-skills/setup` and sets `POSTERLY_DIRECTORY_PROFILE=claude`. MCP 0.50.4 supplies 55 local tools with functional descriptions. AI media generation, generation-job helpers, billing mutations, and legacy aliases are unavailable. Claude skills do not offer CLI or REST fallbacks for excluded operations. Cursor and Gemini use the standard catalog. The matching hosted review endpoint is `https://www.poster.ly/api/mcp?profile=claude`; approval and endpoint changes are separate portal actions.
+
+The frozen runtime overrides the MCP SDK to 1.31.0, the patched 1.x version for GHSA-6qxp-vccf-f47h. The advisory explicitly excludes server and stdio roles, but the override also clears the dependency audit. A real stdio test validates the installed published package and rejects excluded names before any REST request.

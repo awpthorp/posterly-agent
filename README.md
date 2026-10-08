@@ -18,7 +18,7 @@ One API key unlocks three interfaces:
 
 | Interface | Best for | Entry point |
 | --- | --- | --- |
-| MCP | Claude Code, Claude Desktop, Cursor | Bundled `.mcp.json` or `npx -y posterly-mcp-server@0.50.3` |
+| MCP | Claude Code, Claude Desktop, Cursor | Bundled `.mcp.json` or `npx -y posterly-mcp-server@0.50.4` |
 | CLI | Terminal agents, scripts, CI | `npx -y @posterly/cli@0.1.5` |
 | REST | Everything else | `https://www.poster.ly/api/v1` |
 

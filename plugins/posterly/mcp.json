@@ -2,7 +2,7 @@
   "mcpServers": {
     "posterly": {
       "command": "npx",
-      "args": ["-y", "posterly-mcp-server@0.50.3"],
+      "args": ["-y", "posterly-mcp-server@0.50.4"],
       "env": {
         "POSTERLY_API_KEY": "${POSTERLY_API_KEY}"
       }

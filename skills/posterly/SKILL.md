@@ -37,7 +37,7 @@ Use hosted MCP when the runtime can call MCP tools (Claude Code plugin, Cursor, 
 
 Do not invent a second product surface, UI, Autopilot, or a live Claude Connectors listing. If MCP tools are missing, point the user at the MCP docs rather than pasting a long REST map.
 
-Local stdio is optional: `npx -y posterly-mcp-server@0.50.3` with `POSTERLY_API_KEY` in the environment. Claude Code plugins that ship this package can load MCP from `.mcp.json` using plugin `userConfig.api_key`.
+Local stdio is optional: `npx -y posterly-mcp-server@0.50.4` with `POSTERLY_API_KEY` in the environment. Claude Code plugins that ship this package can load MCP from `.mcp.json` using plugin `userConfig.api_key`.
 
 ## Auth
 
@@ -106,3 +106,7 @@ If MCP is unavailable and the user has a shell, `npx -y @posterly/cli@0.1.5` use
 - MCP: https://www.poster.ly/mcp
 - Hosted MCP: https://www.poster.ly/api/mcp
 - Agents signup: https://www.poster.ly/agents/signup
+
+## Claude directory scope
+
+Claude directory installs set `POSTERLY_DIRECTORY_PROFILE=claude` and use `https://www.poster.ly/api/mcp?profile=claude` for hosted connections. In this profile, AI image, video, and audio generation, billing mutations, and legacy tool aliases are unavailable. Do not switch profiles or use CLI or REST fallbacks for excluded operations. Use canonical live tool schemas and their view or action selectors. Other clients retain the standard catalog.
