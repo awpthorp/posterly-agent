@@ -1,4 +1,4 @@
-# posterly for Claude Code
+# posterly for AI agents
 
 Schedule, publish, and manage social content across **18 platforms** with [posterly](https://www.poster.ly) from Claude Code, other Claude surfaces that support plugins, and any agent that can run MCP or shell commands.
 
@@ -18,8 +18,8 @@ One API key unlocks three interfaces:
 
 | Interface | Best for | Entry point |
 | --- | --- | --- |
-| MCP | Claude Code, Claude Desktop, Cursor | Bundled `.mcp.json` or `npx -y posterly-mcp-server@latest` |
-| CLI | Terminal agents, scripts, CI | `npx -y @posterly/cli@latest` |
+| MCP | Claude Code, Claude Desktop, Cursor | Bundled `.mcp.json` or `npx -y posterly-mcp-server@0.50.3` |
+| CLI | Terminal agents, scripts, CI | `npx -y @posterly/cli@0.1.5` |
 | REST | Everything else | `https://www.poster.ly/api/v1` |
 
 ## Install for Claude Code
@@ -43,6 +43,16 @@ After the plugin is installed, run:
 
 That walkthrough covers API key creation, env/userConfig, `doctor`, and `accounts:list`.
 
+## Install for Gemini CLI
+
+```bash
+gemini extensions install https://github.com/awpthorp/posterly-agent
+```
+
+Enter your posterly API key in the sensitive setting when prompted. The extension loads the same pinned MCP server and publishing skills as the Claude and Cursor packages. Run `/mcp` to check the connection, then ask it to list your connected accounts.
+
+To update: `gemini extensions update posterly`. The Gemini CLI gallery indexes public repositories tagged `gemini-cli-extension`; gallery availability requires its crawler to validate this release.
+
 ## skills.sh
 
 This repo ships a public **posterly** agent skill for [skills.sh](https://skills.sh/awpthorp/posterly-agent/posterly). It is MCP-first guidance for scheduling and publishing across social platforms, not a second product surface.
@@ -52,13 +62,13 @@ The skill teaches when to use hosted MCP and the safe publish loop: `whoami`, li
 Install:
 
 ```bash
-npx skills add awpthorp/posterly-agent
+npx -y skills@1.7.1 add awpthorp/posterly-agent
 ```
 
 To install only this skill:
 
 ```bash
-npx skills add awpthorp/posterly-agent --skill posterly
+npx -y skills@1.7.1 add awpthorp/posterly-agent --skill posterly
 ```
 
 Or copy [SKILL.md](SKILL.md) (identical to [skills/posterly/SKILL.md](skills/posterly/SKILL.md)) into your agent's skills directory.
@@ -98,7 +108,7 @@ publication are still pending.
 ## Setup
 
 1. Create a posterly account at [poster.ly](https://www.poster.ly) and connect your social accounts.
-2. Enable API access ([Dashboard -> Settings -> API Keys](https://www.poster.ly/dashboard/api)). Requires the **$3/month API add-on** on any plan.
+2. Enable API access ([Dashboard -> Settings -> API Keys](https://www.poster.ly/dashboard/api)). Requires a paid plan with API access. Starter + API is available from $10/month.
 3. Give the key to Claude (plugin userConfig) or your shell:
 
 ```bash
@@ -110,14 +120,14 @@ export POSTERLY_API_KEY=pst_live_...
 4. Smoke test:
 
 ```bash
-npx -y @posterly/cli@latest doctor --pretty
-npx -y @posterly/cli@latest accounts:list --pretty
+npx -y @posterly/cli@0.1.5 doctor --pretty
+npx -y @posterly/cli@0.1.5 accounts:list --pretty
 ```
 
 Global install is optional:
 
 ```bash
-npm i -g @posterly/cli
+npm i -g @posterly/cli@0.1.5
 posterly doctor --pretty
 ```
 

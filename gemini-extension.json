@@ -1,0 +1,26 @@
+{
+  "name": "posterly",
+  "version": "1.3.3",
+  "description": "Schedule, validate, and analyze social posts across 18 platforms with posterly.",
+  "mcpServers": {
+    "posterly": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "posterly-mcp-server@0.50.3"
+      ],
+      "env": {
+        "POSTERLY_API_KEY": "${POSTERLY_API_KEY}"
+      }
+    }
+  },
+  "contextFileName": "GEMINI.md",
+  "settings": [
+    {
+      "name": "posterly API key",
+      "description": "Create a key at https://www.poster.ly/dashboard/api. Requires a paid plan with API access.",
+      "envVar": "POSTERLY_API_KEY",
+      "sensitive": true
+    }
+  ]
+}

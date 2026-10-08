@@ -1,157 +1,61 @@
-# posterly Claude plugin, Cursor plugin, and MCP directory submission
+# posterly distribution releases
 
-Human checklist for shipping the official Claude plugin listing, the Cursor Marketplace listing, and finishing MCP connector directory steps (including PR #309 follow-up on the main posterly app).
+## Current package
 
-## Claude plugin directory
+The Claude, Cursor, and Gemini CLI packages use version 1.3.3 and pin `posterly-mcp-server@0.50.3`. CLI fallbacks pin `@posterly/cli@0.1.5`. The OpenAI package has its own version and release process under `openai/`.
 
-### Preflight (required)
-
-From this repo root (`posterly-agent`):
-
-```bash
-claude plugin validate . --strict
-```
-
-Must exit 0. Fix any YAML or manifest issues before submitting.
-
-Also sanity-check:
-
-- [ ] Public GitHub repo: https://github.com/awpthorp/posterly-agent
-- [ ] `plugin.json` version is `1.3.0` (or newer) with 18-platform copy
-- [ ] Root `SKILL.md` and `skills/posterly/SKILL.md` are identical
-- [ ] `.mcp.json` bundles `posterly-mcp-server@latest` with `${user_config.api_key}`
-- [ ] `skills/setup/SKILL.md` exists for `/posterly:setup`
-- [ ] README install commands match marketplace naming:
-  - `/plugin marketplace add awpthorp/posterly-agent`
-  - `/plugin install posterly@posterly-agent`
-
-### Submit the plugin
-
-Submit through one of Anthropic's official entry points (URLs change; use whichever is live):
-
-- https://platform.claude.com/plugins/submit
-- https://claude.ai/admin-settings/directory/submissions/plugins/new
-- Form shortcut: https://clau.de/plugin-directory-submission
-
-Suggested form answers:
-
-| Field | Value |
-| --- | --- |
-| Name | posterly |
-| Repo | https://github.com/awpthorp/posterly-agent |
-| Homepage | https://www.poster.ly/agents |
-| Description | Schedule and manage social posts across 18 platforms via MCP and the posterly CLI |
-| Categories | Productivity, Social media, Automation |
-| Auth | API key (`pst_live_...`), $3/mo API add-on |
-
-### After listing
-
-- [ ] Smoke install in a clean Claude Code session
-- [ ] Confirm plugin userConfig API key unlocks MCP tools
-- [ ] Confirm `npx -y @posterly/cli@latest doctor --pretty` still works with the same key
-
----
-
-## Cursor Marketplace
-
-**Status: SUBMITTED 2026-08-12.** Receipt: "We've received your submission. We'll follow up at marketplace-publishing@cursor.com once we review your plugin."
-
-Watch `awpthorp@gmail.com` (including spam) for mail **from** `marketplace-publishing@cursor.com`. Do not resubmit unless they ask. Listing is not live until that review finishes.
-
-Public repo on `main` (commit `5f9afc2`): https://github.com/awpthorp/posterly-agent
-
-Form that was sent:
-
-| Field | Value |
-| --- | --- |
-| Organization name | posterly |
-| Handle | posterly |
-| Contact | awpthorp@gmail.com (Individual, Cursor account) |
-| Logotype URL | https://www.poster.ly/logo_icon.png |
-| Website | https://www.poster.ly |
-| GitHub | https://github.com/awpthorp/posterly-agent |
-
-### Preflight (required)
-
-From this repo root (`posterly-agent`):
+Run from this repository root before every release:
 
 ```bash
 node scripts/validate-template.mjs
+node scripts/validate-distribution.mjs
+claude plugin validate .claude-plugin/plugin.json
+claude plugin validate .claude-plugin/marketplace.json
 ```
 
-Must exit 0. A missing `hooks.json` warning is expected. A missing `mcp.json` warning is not.
+Keep the three posterly skill copies identical and the two setup skill copies identical. Raise plugin versions together when changing these shared packages. Update the package pins and `registry/server.json` only after the corresponding MCP version is published on npm and deployed. Do not add broad shell pre-approvals to a skill.
 
-- [x] `.cursor-plugin/marketplace.json` is present
-- [x] `plugins/posterly/.cursor-plugin/plugin.json` is valid (name `posterly`, version `1.3.1`, `POSTERLY_API_KEY` variable, no secrets)
-- [x] `node scripts/validate-template.mjs` passes
-- [x] Skill copies stay in sync:
-  - `skills/posterly/SKILL.md` identical to `plugins/posterly/skills/posterly/SKILL.md`
-  - `skills/setup/SKILL.md` identical to `plugins/posterly/skills/setup/SKILL.md`
+## Claude
 
-### After listing
+Use the existing records at https://claude.ai/directory/manage. The plugin records previously needed changes because package launchers were unpinned. The hosted MCP connector was in review as of 2026-10-08. Local stdio runs in Claude Code and Cowork; web chat uses the separately submitted hosted connector at https://www.poster.ly/api/mcp.
 
-- [ ] Search posterly in Cursor Marketplace / Customize and install it
-- [ ] Set `POSTERLY_API_KEY` under Plugins -> Configure
-- [ ] Confirm MCP tools load and `npx -y @posterly/cli@latest doctor --pretty` still works with the same key
+Merge fixes, then use **Check for new commits** on a non-rejected record. A rejected record needs **Resubmit for review** on its Review tab. Verify the scanner is reading the new commit before claiming any finding has cleared. Do not create a duplicate submission or withdraw a record just to refresh it.
 
----
+Verification has no separate application: Anthropic decides whether to escalate a connector to deeper testing. A pending review is not approval or verification. Follow https://claude.com/docs/plugins/submit and https://claude.com/docs/connectors/verification.
 
-## MCP Connectors Directory (PR #309 follow-up)
+## Cursor
 
-PR #309 on the main posterly app covers OAuth Dynamic Client Registration (DCR) and related MCP connector readiness. The plugin repo alone is not enough for the connectors directory.
+Submitted 2026-08-12. Receipt: "We've received your submission. We'll follow up at marketplace-publishing@cursor.com once we review your plugin." The logged-in publisher portal showed a new application form, without the older receipt's status, on 2026-10-08. Do not duplicate the application until the publisher identity or original submission has been resolved.
 
-### When PR #309 is merged
+The submitted organization and handle were `posterly`; website https://www.poster.ly; repository https://github.com/awpthorp/posterly-agent. The prepared plugin remains in `plugins/posterly/`.
 
-1. **Apply OAuth DCR migration**
+## Gemini CLI
 
-   ```bash
-   supabase db push
-   ```
+The root `gemini-extension.json` exposes the pinned MCP server and requests an API key as a sensitive setting. Install using:
 
-   Only after the PR is merged and the migration is reviewed. Do not run production DDL from this plugin repo.
+```bash
+gemini extensions install https://github.com/awpthorp/posterly-agent
+```
 
-2. **Verify production site URL**
+Add the `gemini-cli-extension` GitHub topic after merging. Google's gallery crawls public tagged repositories daily and lists packages that pass its validation. Tagging does not prove listing. See https://geminicli.com/docs/extensions/releasing/.
 
-   - `NEXT_PUBLIC_SITE_URL=https://www.poster.ly`
+## Official MCP Registry
 
-3. **Create a comped reviewer account**
+`registry/server.json` is the public release metadata copied from the MCP server's canonical metadata in the main app. The **Publish MCP Registry** workflow validates and publishes it using GitHub OIDC. It runs manually, with no long-lived GitHub or registry secret.
 
-   - Active posterly subscription
-   - API add-on enabled
-   - At least one connected social account
-   - Share credentials only through Anthropic's secure reviewer channel if requested
+After merging a metadata update:
 
-4. **Submit to the MCP connectors directory**
+```bash
+gh workflow run publish-registry.yml --repo awpthorp/posterly-agent
+```
 
-   - https://clau.de/mcp-directory-submission
-   - Fallback email: mcp-review@anthropic.com
+Verify the exact version appears as latest in the public registry API. Keep old release history. Do not npm publish from this wrapper repository.
 
-5. **Reference materials for reviewers**
+## Further directories
 
-   - Hosted MCP: `POST https://www.poster.ly/api/mcp`
-   - Stdio package: `npx -y posterly-mcp-server@latest`
-   - Marketing: https://www.poster.ly/mcp
-   - Agents: https://www.poster.ly/agents
-   - Docs: https://www.poster.ly/docs
+- Cline requires a real installation test with Cline using only the README or `llms-install.md`, plus a 400 by 400 PNG. Complete that test before attesting it on a submission issue.
+- ClawHub requires MIT-0 licensing for published skills. Agree on that license before publishing a copy; the repository currently uses MIT.
+- Muse needs business verification and reviewer access. No submission history was visible under the personal login on 2026-10-08. Resolve the original publisher identity before submitting again.
+- Glama and Smithery already have public listings; update existing records rather than creating duplicates.
 
-### Connector smoke checks
-
-- [ ] `GET https://www.poster.ly/api/mcp` returns server info without auth
-- [ ] Authenticated `tools/list` succeeds with a live API key
-- [ ] OAuth / DCR paths work in production after migration
-- [ ] Rate limit and billing handoff headers still surface upgrade URLs
-
----
-
-## Related main-app work (not in this repo)
-
-- Docs page for Claude plugin install
-- Cross-links from MCP and CLI docs
-- Keep root `SKILL.md` in the main monorepo in sync with this package
-- Plan: `plans/017-claude-plugin-directory.md` in the main posterly repo
-
-## Do not
-
-- npm publish from this checklist (CLI and MCP packages are separate)
-- Commit API keys or reviewer passwords
-- Push production Supabase migrations without the normal app release process
+Never commit API keys, reviewer credentials, private logs, or customer data. Reviewer access for one directory does not authorize sharing credentials with another.

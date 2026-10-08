@@ -21,7 +21,7 @@ Then reload Cursor.
 
 Open **Plugins -> Configure** and set `POSTERLY_API_KEY`.
 
-Get a key from [Dashboard -> Settings -> API Keys](https://www.poster.ly/dashboard/api). Keys start with `pst_live_`. API access requires the $3/mo API add-on.
+Get a key from [Dashboard -> Settings -> API Keys](https://www.poster.ly/dashboard/api). Keys start with `pst_live_`. API access requires a paid plan with API access. Starter + API is available from $10/month.
 
 ## Example prompts
 

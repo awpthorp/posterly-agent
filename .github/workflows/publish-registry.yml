@@ -1,0 +1,27 @@
+name: Publish MCP Registry
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: publish-mcp-registry
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: Download verified official publisher
+        run: |
+          curl -fsSL -o publisher.tar.gz https://github.com/modelcontextprotocol/registry/releases/download/v1.8.1/mcp-publisher_linux_amd64.tar.gz
+          curl -fsSL -o checksums.txt https://github.com/modelcontextprotocol/registry/releases/download/v1.8.1/registry_1.8.1_checksums.txt
+          expected=$(awk '$2 == "mcp-publisher_linux_amd64.tar.gz" {print $1}' checksums.txt)
+          test -n "$expected"
+          printf '%s  publisher.tar.gz\n' "$expected" | sha256sum --check
+          tar -xzf publisher.tar.gz mcp-publisher
+      - name: Validate and publish
+        run: |
+          ./mcp-publisher validate registry/server.json
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish registry/server.json
