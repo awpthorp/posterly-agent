@@ -11,7 +11,7 @@ Merge this entry into Cline's MCP server settings without replacing other server
   "mcpServers": {
     "posterly": {
       "command": "npx",
-      "args": ["-y", "posterly-mcp-server@0.50.3"],
+      "args": ["-y", "posterly-mcp-server@0.50.4"],
       "env": {"POSTERLY_API_KEY": "<user-provided posterly API key>"},
       "disabled": false,
       "autoApprove": []

@@ -2,7 +2,7 @@
 name: setup
 description: >-
   First-time posterly connect. Probe for an existing key, then onboard with
-  agent signup, CLI login, or human pages. Never collect cards or passwords.
+  agent signup or human pages. Never collect cards or passwords.
 disable-model-invocation: true
 ---
 
@@ -12,7 +12,7 @@ Use this skill when the user runs `/posterly:setup` or asks to connect posterly 
 
 ## First run
 
-Probe once. If MCP `whoami` or `npx -y @posterly/cli@0.1.5 doctor --pretty` succeeds, skip onboarding. Never start signup. Never ask the user to paste a key they already have. Prefer MCP tools for day-to-day work after the probe succeeds.
+Probe once. If MCP `whoami` succeeds, skip onboarding. Never start signup. Never ask the user to paste a key they already have. Prefer MCP tools for day-to-day work after the probe succeeds.
 
 If the probe fails, posterly is a social scheduler. API and MCP access need a paid plan with API access. Starter + API is available from $10/month; check current pricing on the signup page. Never collect card numbers, posterly passwords, or social passwords. Payment and password setup stay in the user's browser.
 
@@ -26,14 +26,7 @@ Signup APIs never return a `pst_live_` key. Do not dump raw JSON. Narrate progre
 4. Poll `get_signup_session` and tell them what is happening (checkout pending, payment confirmed, password required, agent access required).
 5. When status is `agent_access_required`, ask them to copy the dashboard setup instructions or API key into this chat, plugin config, or `POSTERLY_API_KEY`.
 
-### Path 2: CLI login (shell, existing or new account)
-
-```bash
-npx -y @posterly/cli@0.1.5 auth:login
-npx -y @posterly/cli@0.1.5 doctor --pretty
-```
-
-### Path 3: human pages
+### Path 2: human pages
 
 - New users: https://www.poster.ly/agents/signup
 - Existing users: https://www.poster.ly/dashboard/api
@@ -43,10 +36,10 @@ npx -y @posterly/cli@0.1.5 doctor --pretty
 
 1. Call `whoami`.
 2. Ask which social account to connect first.
-3. Use `create_connect_session` or `connect:link`, send the connect URL, and poll until connected.
+3. Use `create_connect_session`, send the connect URL, and poll until connected.
 4. Help schedule the first post.
 
-If doctor or whoami failed, stay on this script. Do not invent a second setup.
+If whoami failed, stay on this script. Do not invent a second setup.
 
 ## Human in the loop
 
@@ -56,12 +49,10 @@ Confirm with the user before:
 - Deleting posts or post groups
 - Disconnecting accounts
 - Posting or deleting Google Business review replies
-- Spending AI credits (image/video generation)
-- Any CLI command that requires `--confirm`
 
 ## Smoke checklist
 
-- [ ] Probe succeeded (`whoami` or `doctor --pretty`)
+- [ ] Probe succeeded (`whoami`)
 - [ ] At least one social account is connected, or the user has a connect URL
 - [ ] User understands human-in-the-loop rules
 
@@ -70,9 +61,8 @@ Confirm with the user before:
 - Agents: https://www.poster.ly/agents
 - Agent signup: https://www.poster.ly/agents/signup
 - MCP: https://www.poster.ly/mcp
-- CLI: https://www.poster.ly/cli
 - Docs: https://www.poster.ly/docs
 
 ## Claude directory scope
 
-Claude directory installs set `POSTERLY_DIRECTORY_PROFILE=claude` and use `https://www.poster.ly/api/mcp?profile=claude` for hosted connections. In this profile, AI image, video, and audio generation, billing mutations, and legacy tool aliases are unavailable. Do not switch profiles or use CLI or REST fallbacks for excluded operations. Use canonical live tool schemas and their view or action selectors. Other clients retain the standard catalog.
+This plugin uses the restricted Claude directory catalog. It supports social publishing, existing-media uploads, text captions, analytics, and social inboxes. AI image, video, and audio generation and billing mutations are unavailable. Never attempt them through a CLI, REST endpoint, or another posterly tool. Account signup and any payments remain human actions in the browser. Legacy tool aliases are unavailable; use the live canonical schemas and their view or action selectors.

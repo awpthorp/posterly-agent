@@ -32,12 +32,12 @@ Use this skill when the user wants to schedule or publish social posts, list con
 Use hosted MCP when the runtime can call MCP tools (Claude Code plugin, Cursor, or any MCP client).
 
 - Docs: https://www.poster.ly/mcp
-- Endpoint: `POST https://www.poster.ly/api/mcp`
+- Endpoint: `POST https://www.poster.ly/api/mcp?profile=claude`
 - `GET https://www.poster.ly/api/mcp` returns server info without auth
 
 Do not invent a second product surface, UI, Autopilot, or a live Claude Connectors listing. If MCP tools are missing, point the user at the MCP docs rather than pasting a long REST map.
 
-Local stdio is optional: `npx -y posterly-mcp-server@0.50.4` with `POSTERLY_API_KEY` in the environment. Claude Code plugins that ship this package can load MCP from `.mcp.json` using plugin `userConfig.api_key`.
+Local stdio is optional: `node ${CLAUDE_PLUGIN_ROOT}/node_modules/posterly-mcp-server/dist/index.js` with `POSTERLY_DIRECTORY_PROFILE=claude` and the sensitive plugin API-key setting. Claude Code plugins that ship this package can load MCP from `.mcp.json` using plugin `userConfig.api_key`.
 
 ## Auth
 
@@ -77,8 +77,7 @@ Confirm the exact target before:
 - `create_post` / `create_posts_batch`
 - Delete post, post group, comment, or disconnect
 - Review replies, DMs, hide or unhide comments
-- Spending AI credits
-- Billing or API-key changes
+- API-key changes
 
 Do not pass `confirm: true` until the user has approved that action.
 
@@ -86,8 +85,8 @@ Do not pass `confirm: true` until the user has approved that action.
 
 Prefer MCP names. Do not dump raw JSON unless the user is debugging.
 
-- `whoami`, `list_accounts`, `list_brands`, `list_platforms`, `get_platform_schema`
-- `validate_post`, `list_posts`, `get_post`, `get_post_missing`
+- `whoami`, `list_accounts`, `list_brands`, `list_platforms`
+- `validate_post`, `list_posts`, `get_post`, `list_analytics`
 - `find_available_slot`, `list_media`, `list_activity`
 - Analytics tools when the user asks how content performed
 
@@ -99,7 +98,7 @@ Tell the user the post was created, share any dashboard link the tool returned, 
 
 ## Fallback
 
-If MCP is unavailable and the user has a shell, `npx -y @posterly/cli@0.1.5` uses the same key. Prefer MCP when tools are present.
+If MCP is unavailable, explain how to configure the plugin or direct the user to the MCP documentation. Do not use CLI or REST fallbacks to bypass the directory profile.
 
 ## Links
 
@@ -109,4 +108,4 @@ If MCP is unavailable and the user has a shell, `npx -y @posterly/cli@0.1.5` use
 
 ## Claude directory scope
 
-Claude directory installs set `POSTERLY_DIRECTORY_PROFILE=claude` and use `https://www.poster.ly/api/mcp?profile=claude` for hosted connections. In this profile, AI image, video, and audio generation, billing mutations, and legacy tool aliases are unavailable. Do not switch profiles or use CLI or REST fallbacks for excluded operations. Use canonical live tool schemas and their view or action selectors. Other clients retain the standard catalog.
+This plugin uses the restricted Claude directory catalog. It supports social publishing, existing-media uploads, text captions, analytics, and social inboxes. AI image, video, and audio generation and billing mutations are unavailable. Never attempt them through a CLI, REST endpoint, or another posterly tool. Account signup and any payments remain human actions in the browser. Legacy tool aliases are unavailable; use the live canonical schemas and their view or action selectors.
