@@ -51,7 +51,7 @@
               "description": "Discover the reviewer workspace and its connected LinkedIn account. Setup: sign in with the dedicated reviewer account; it has one isolated OpenAI review workspace and one connected LinkedIn Personal account. Publishing is paused in this workspace.",
               "prompt": "Which social accounts do I have connected in posterly?",
               "tools_triggered": "whoami, list_accounts",
-              "expected_behavior": "Return only workspaces accessible to the reviewer and actual account IDs, platforms, and handles from list_accounts. Do not create or modify content."
+              "expected_behavior": "Return only workspaces accessible to the reviewer and actual connected account names, platforms, and handles from list_accounts. Keep internal account and workspace IDs in tool calls unless the user needs them. Do not create or modify content."
             },
             {
               "description": "Inspect saved draft content without publishing it. Setup: the OpenAI review workspace contains a LinkedIn draft with caption \"OpenAI review sample draft. This content is for integration testing.\" Publishing remains paused.",
@@ -63,7 +63,7 @@
               "description": "Inspect platform requirements without mutating the account. Setup: reviewer LinkedIn account is connected.",
               "prompt": "What kinds of posts and media can I publish to my connected LinkedIn account?",
               "tools_triggered": "list_accounts, list_platforms_schema",
-              "expected_behavior": "Resolve the connected LinkedIn account and call list_platforms_schema and its account_id. Explain supported post types and media limits from the returned schema; do not claim planned capabilities are live."
+              "expected_behavior": "Resolve the connected LinkedIn account and call list_platforms_schema with its account_id. Explain supported post types and media limits from the returned schema; do not claim planned capabilities are live."
             },
             {
               "description": "Find timezone-aware posting opportunities without creating content. Setup: use the isolated OpenAI review workspace, its connected LinkedIn account, and the saved sample draft. Publishing is paused; a returned free slot does not resume publishing.",
@@ -94,7 +94,8 @@
           ]
         },
         "commerce": true,
-        "commerce_description": "The service sells subscriptions and AI credit packs independently on the posterly website. This plugin uses existing entitlements only. Its OpenAI MCP profile excludes subscription management, checkout, direct credential entry, API key administration, OAuth client administration, and webhooks. It must not initiate purchases or upgrades, display subscription offers, sell credit packs, or link to checkout. AI tools consume existing quota or credits only after approval. No card data is collected by the plugin."
+        "commerce_description": "The service sells subscriptions and AI credit packs independently on the posterly website. This plugin uses existing entitlements only. Its OpenAI MCP profile excludes subscription management, checkout, direct credential entry, API key administration, OAuth client administration, and webhooks. It must not initiate purchases or upgrades, display subscription offers, sell credit packs, or link to checkout. AI tools consume existing quota or credits only after approval. No card data is collected by the plugin.",
+        "demo_recording_url": "https://xgwukxwzdlthevausmim.supabase.co/storage/v1/object/public/media/reviews/openai/posterly-walkthrough-2026-10-08-235620f33b2e.mp4"
       },
       "publication": {
         "countries": [],

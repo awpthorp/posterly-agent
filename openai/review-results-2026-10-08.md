@@ -63,3 +63,15 @@ has not been recorded. Alex requested finishing the tests first. Reviewer
 credentials have not been disclosed through the secure OpenAI form; that
 specific transmission is awaiting authorization. Legal attestations remain for
 the authorized developer. The saved public draft is not submitted or published.
+
+## Current OpenAI walkthrough video
+
+Alex recorded the actual reviewer workflow in standard ChatGPT on 8 October 2026. All five positive prompts and three negative prompts completed in one conversation. The post preview passed validation, showed no warnings, and waited for approval. No scheduling or publication approval was given. The conversation is https://chatgpt.com/c/6ac744e7-54b8-83eb-a08d-b8c7469690f4.
+
+The exported video is 133.3 seconds, H.264, 1250 by 720, with no audio. Full decoding completed without errors. Sampled frames show the actual results and refusals, with no passwords or tokens. The recording still shows internal reviewer fixture IDs in the account result, because the development connection does not install the bundled skills. The included skill instructs the model to keep those IDs within tool calls. This difference has not been retested as an installed skill.
+
+The original recording was remuxed for streaming startup without changing its video content. It is hosted in posterly's existing public media storage. An unauthenticated request returned HTTP 200 and video/mp4, and Chrome loaded and played it with duration 133.3 seconds and no media error.
+
+[OpenAI reviewer walkthrough](https://xgwukxwzdlthevausmim.supabase.co/storage/v1/object/public/media/reviews/openai/posterly-walkthrough-2026-10-08-235620f33b2e.mp4)
+
+Video SHA-256: `235620f33b2ed2870ee2a442757ed5dee519f7758f0c544e68b54868aaf92daf`. The video link is declared in the public package. Reviewer credentials remain outside this repository and have not been disclosed to OpenAI. The final portal import, saved-version verification, secure reviewer credentials, and developer attestations remain separate release gates.
