@@ -1,0 +1,10 @@
+{
+  "name": "posterly-agent",
+  "version": "1.3.4",
+  "private": true,
+  "description": "Locked runtime dependencies for the posterly Claude plugin",
+  "license": "MIT",
+  "dependencies": {
+    "posterly-mcp-server": "0.50.3"
+  }
+}

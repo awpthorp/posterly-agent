@@ -12,10 +12,23 @@ for (const file of [".claude-plugin/marketplace.json", ".cursor-plugin/marketpla
 }
 const registry = await json("registry/server.json");
 assert.equal(registry.version, registry.packages[0].version);
-for (const file of [".mcp.json", "plugins/posterly/mcp.json", "gemini-extension.json"]) {
+for (const file of ["plugins/posterly/mcp.json", "gemini-extension.json"]) {
   const server = (await json(file)).mcpServers.posterly;
   assert.equal(server.command, "npx", file);
   assert.deepEqual(server.args, ["-y", `posterly-mcp-server@${registry.version}`], file);
+}
+const claudeServer = (await json(".mcp.json")).mcpServers.posterly;
+assert.equal(claudeServer.command, "node");
+assert.deepEqual(claudeServer.args, ["${CLAUDE_PLUGIN_ROOT}/node_modules/posterly-mcp-server/dist/index.js"]);
+assert.equal(claudeServer.env.POSTERLY_API_KEY, "${user_config.api_key}");
+assert.equal(claude.userConfig.api_key.sensitive, true);
+const packageManifest = await json("package.json");
+const lock = await json("package-lock.json");
+assert.equal(packageManifest.dependencies["posterly-mcp-server"], registry.version);
+assert.deepEqual(lock.packages[""].dependencies, packageManifest.dependencies);
+for (const [path, pkg] of Object.entries(lock.packages)) {
+  if (!path) continue;
+  assert(pkg.version && pkg.integrity && pkg.resolved.startsWith("https://registry.npmjs.org/"), path);
 }
 const skill = await read("skills/posterly/SKILL.md");
 assert.equal(await read("SKILL.md"), skill);
