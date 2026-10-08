@@ -220,8 +220,17 @@ operation-specific titles and descriptions, acknowledges external side effects
 for status changes, and verifies fixed selector dispatch and rejected overrides.
 MCP 0.50.3 passed focused profile tests, TypeScript, build/parity, annotations,
 golden contracts, aliases, tool design, and the production build locally.
-Deployment and scan results will be recorded after the PR lands; no cleared
-0.50.3 findings are claimed yet.
+All GitHub checks passed and PR 1339 merged at
+69e6cfc1f338ed38d0b428b7db4ec4f13201b981. Production deployment
+dpl_2XegtbKaFQt6rPodbqM3XBUzw7fZ was verified READY, and the hosted MCP
+status returned 0.50.3. OpenAI's subsequent scan reports "No issues found in
+the latest MCP scan." All tool findings, including the prior scheduling
+further-review flag, cleared. Proof is saved locally in
+`dist/openai-profile-scan-0.50.3.png`; the findings record is
+`dist/openai-profile-findings-0.50.3.json`. The trusted npm workflow 37739196143 accepted publication of 0.50.3.
+The registry reported that processing may take a few minutes; its latest tag
+was still 0.50.2 at the first verification. Do not equate a successful workflow
+with availability until the published-version check matches.
 
 LinkedIn connection, a saved draft, and the workspace publishing pause are
 verified. ChatGPT reviewer OAuth approval is pending. The draft source version
