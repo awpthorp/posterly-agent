@@ -32,11 +32,17 @@ to reviewers; subscription management tools are excluded from the OpenAI profile
 ## Review preparation
 
 Five positive and three negative cases are in `plugin.json`. They cover account
-discovery, a complete calendar range, account-specific platform requirements,
+discovery, saved draft retrieval, account-specific platform requirements,
 timezone-aware slots, a validated post preview, and three unsupported requests.
-All cases remain **Not run** against the saved reviewer connection as of 2026-10-07.
-Public discovery confirms hosted MCP 0.49.2 and 61 tools with the three required
-boolean annotations. Public discovery is not authenticated case execution.
+All eight cases passed their observable outcomes in ChatGPT Work and standard
+ChatGPT on 2026-10-08 using the isolated reviewer connection. See
+`review-results-2026-10-08.md` for
+actual calls, the initial timing failure, and the limits of that evidence.
+The draft-retrieval case uses the actual saved fixture. No queued post is required
+for these read and validation cases; do not schedule a real public test post.
+The standard hosted catalog retains 61 tools. The replacement submission
+connection discovered the 92-operation OpenAI profile with the required boolean
+annotations. Discovery is not authenticated case execution.
 
 The existing posterly development connection also successfully returned
 `whoami`, `list_accounts`, and `list_platforms` on 2026-10-07. Those read-only
@@ -50,20 +56,28 @@ the existing development connector, not an isolated saved-version reviewer run.
 
 A dedicated `openai-review@poster.ly` account and isolated `OpenAI review`
 workspace were created on 2026-10-07. Password sign-in and absence of MFA were
-verified. Complimentary Pro and API access run through 2027-01-05. Credentials
+verified, including password sign-in through the actual browser dashboard.
+The normal browser onboarding was completed with name OpenAI and timezone
+Asia/Dubai, skipping social connection and first-post creation for now.
+Complimentary Pro and API access run through 2027-01-05. Credentials
 are stored outside the repository in a local mode-0600 file, and have not been
-shared with OpenAI. No social account is connected to this reviewer workspace.
-The author offered his personal LinkedIn destination; use the normal browser
-connection flow rather than copying provider tokens or exposing his main login.
+shared with OpenAI. On 2026-10-08, Alex completed the normal LinkedIn Personal
+connection flow. The reviewer workspace now shows Alex Thorp as active. It is a
+real personal destination, so do not publish sample content there. Publishing
+was paused only in OpenAI review at 10:29 Asia/Dubai. A sample LinkedIn draft
+was saved with caption "OpenAI review sample draft. This content is for
+integration testing." No provider tokens were copied and no public post was made.
 
 Complete the reviewer fixture with:
 
 - Active comped subscription and API entitlement for the review period.
 - Password sign-in without MFA, mailbox codes, or private network access.
 - A connected test LinkedIn account and its normal account permissions.
-- A sample draft and one clearly marked sample scheduled post seven days ahead.
+- The existing sample draft and workspace publishing pause. Leave publishing
+  paused throughout the walkthrough and review.
 
-Use a test social destination. Avoid sharing a real customer's workspace.
+Use only the authorized isolated reviewer workspace. Avoid sharing a real
+customer's workspace. Do not resume publishing or create public test content.
 Store the password and reviewer instructions only in OpenAI's secure Review
 details form. Do not put them in this repository, the ZIP, or public URLs.
 
@@ -72,12 +86,20 @@ details form. Do not put them in this repository, the ZIP, or public URLs.
 The existing `https://www.poster.ly/videos/mcp-api-demo.mp4` shows an older
 Claude workflow. It is reference material, not evidence for this OpenAI version.
 
-Use the existing development plugin connection in ChatGPT or Codex and the
-dedicated reviewer account. Start the user's screen recorder with only that
+Use a development plugin connection to `/api/mcp?profile=openai` in ChatGPT
+and the dedicated reviewer account. The original consolidated development
+connection is preserved. A matching OpenAI review test connection was created on 2026-10-08 as
+`plugin_asdk_app_6ac73a3b5a948191adc4ca85a76d9b29`. Its reviewer OAuth grant
+was authorized by Alex and completed on 2026-10-08. A stale initial consent
+request expired; restarting the same grant succeeded. The recipient and six
+requested scopes match the existing ChatGPT connector. All eight scenarios
+were then exercised in ChatGPT Work and standard ChatGPT. This development connection tests the
+OpenAI MCP profile; it does not install the two packaged skills or publish the
+saved portal draft. Start the user's screen recorder with only that
 window visible. Demonstrate:
 
 1. OAuth connection and account discovery using positive case 1.
-2. Calendar results using case 2, including the sample scheduled post.
+2. Saved draft results using case 2, including the exact sample caption.
 3. Account capabilities and three returned Asia/Dubai slots using cases 3 and 4.
 4. The exact caption and successful validation from case 5. Show the preview and
    that the assistant waits before scheduling.
@@ -155,20 +177,96 @@ is retained as a backup. A separate public submission is required for this
 server profile. The header extension PR 1336 was closed without merging because
 it did not address this portal restriction.
 
-A replacement upload is pending. Browser work paused when the Mac locked during
-file selection. No replacement draft, adapter scan, public review submission, or
-publication is claimed yet.
+A replacement version 1.1.0 was uploaded on 2026-10-07 after the Mac was unlocked.
+The saved plugin is `plugin_asdk_app_6ac675cfa8a0819197c6cd0f08b7d264`, draft
+`appsub_6ac675cfa8d0819184bd1d644e4b7c15`. Its public developer is Grassroots
+Marketing LLC and its package name is `posterly-openai`. The setup dialog
+retains the exact URL `https://www.poster.ly/api/mcp?profile=openai`, even though
+the summary displays only the URL without query parameters. OAuth authorization
+and domain verification passed, MCP configuration is Configured, and discovery
+returned all 92 operations. The source identity change was merged in agent
+repository PR 5, commit e885d25173b562fb7918db18a07d5d58bdb2550d.
+
+The replacement scan cleared the original dispatcher, annotation, and manual
+tool findings. It returned seven new duplicate-name findings for the three post
+status variants and four approval variants. OpenAI imports annotation titles as
+display names, and these variants shared titles. Main app PR 1337 appends their
+fixed status or approval action to the title and adds a unique-title regression
+assertion. All checks passed and PR 1337 merged at
+90e340946b9d15c0cc9c50027ca77a36543cecdd. MCP 0.50.1 is live on production
+deployment dpl_DLJcuRU78umMZFm6QRJAs3SxajVQ and on npm, verified by the published
+version check. The complete initial replacement findings are saved locally in
+`dist/openai-profile-findings.json`.
+
+The 0.50.1 rescan cleared duplicate names, but returned description findings for
+create_connect_session and create_post, plus further manual review for
+update_post_status_scheduled. The two descriptions still referenced consolidated
+selectors; the profile must use its own separately declared operation names,
+including nested schema descriptions. A follow-up fix shipped on 2026-10-08 in main app PR 1338,
+https://github.com/awpthorp/posterly/pull/1338, merge commit
+6b4f56608a0288983da644f28872499b1a16a2a6. MCP 0.50.2 clarifies the
+connection handoff and immediate versus scheduled publication, and updates
+description references on copied schemas without mutating the consolidated
+definitions. All GitHub checks passed. Production deployment
+dpl_E4UbgWBnqwVAGLrc1vHdeDi6Kpo2 was verified READY. The trusted npm workflow
+published 0.50.2 and the published-version check passed. The earlier GitHub
+write failures recovered; they no longer block release work.
+
+The 0.50.2 scan at 2026-10-08 10:28:26 Asia/Dubai cleared create_connect_session
+and create_post findings. Seven fixed status/approval variants now have
+description findings: six advertise capabilities beyond their fixed action,
+and request_changes has unclear copy. update_post_status_scheduled also
+retains its separate further-review finding. Actual dialog messages are saved
+locally in `dist/openai-profile-findings-0.50.2.json`, with a screenshot in
+`dist/openai-profile-scan-0.50.2.png`. The clipboard copy action returned an old
+report, so the current messages were captured from each tool's reviewed dialog.
+
+Main app PR 1339, https://github.com/awpthorp/posterly/pull/1339, provides
+operation-specific titles and descriptions, acknowledges external side effects
+for status changes, and verifies fixed selector dispatch and rejected overrides.
+MCP 0.50.3 passed focused profile tests, TypeScript, build/parity, annotations,
+golden contracts, aliases, tool design, and the production build locally.
+All GitHub checks passed and PR 1339 merged at
+69e6cfc1f338ed38d0b428b7db4ec4f13201b981. Production deployment
+dpl_2XegtbKaFQt6rPodbqM3XBUzw7fZ was verified READY, and the hosted MCP
+status returned 0.50.3. OpenAI's subsequent scan reports "No issues found in
+the latest MCP scan." All tool findings, including the prior scheduling
+further-review flag, cleared. Proof is saved locally in
+`dist/openai-profile-scan-0.50.3.png`; the findings record is
+`dist/openai-profile-findings-0.50.3.json`. The trusted npm workflow 37739196143 published 0.50.3. After registry
+processing, the published-version check passed and the latest tag was
+verified as 0.50.3. Both hosted and npm releases are complete.
+
+LinkedIn connection, a saved draft, and the workspace publishing pause are
+verified. ChatGPT reviewer OAuth completed, and the eight scenarios on both
+ChatGPT surfaces have recorded outcomes. Package version 1.1.2 includes the executed review fixtures, privacy and slot
+guidance, and the current OpenAI walkthrough URL. It was uploaded to the
+existing portal draft on 2026-10-08. The saved version remains unsubmitted
+and unpublished.
 
 The privacy assessment retry returned "We couldn't complete an automated
 assessment of your privacy policy. Feel free to submit for additional review."
-A current walkthrough, isolated reviewer access, execution of all eight cases,
-and developer attestations still remain. No public review submission was made.
+The current walkthrough is recorded, hosted, and verified to play without
+private sign-in. Secure reviewer credential disclosure, final saved-version
+verification, and developer attestations still remain. No
+public review submission was made.
 
-After connection, scan tools and resolve findings. Run all eight review cases
-against the exact saved version and record evidence here. Enter reviewer access
+Preserve the clear tool scan. Complete host verification, record the walkthrough,
+and upload the complete package with its actual video URL. Enter reviewer access
 in the secure form. Submission for review and publication are separate actions.
 The authorized developer must complete legal and policy attestations.
 
 Official instructions:
 [Packaging](https://developers.openai.com/plugins/build/plugins),
 [Submission](https://developers.openai.com/plugins/deploy/submission).
+
+## Current reviewer video
+
+[OpenAI reviewer walkthrough](https://xgwukxwzdlthevausmim.supabase.co/storage/v1/object/public/media/reviews/openai/posterly-walkthrough-2026-10-08-235620f33b2e.mp4)
+
+This is the actual 133.3-second ChatGPT walkthrough recorded on 2026-10-08.
+It shows all five positive and three negative cases. The validated sample
+remained at the approval preview. The video contains no passwords or tokens;
+internal reviewer fixture IDs are visible in one result. Browser playback and
+unauthenticated HTTP access were verified. See the review results for the
+development connection and packaged-skill verification limits.

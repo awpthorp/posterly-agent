@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "posterly-openai",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "Draft, validate, schedule, and manage social content across 18 platforms through posterly.",
   "author": {
     "name": "Grassroots Marketing LLC",
@@ -48,34 +48,34 @@
         "test_cases": {
           "positive": [
             {
-              "description": "Discover the reviewer workspace and connected sample accounts. Setup: sign in with the dedicated reviewer account; it has one isolated workspace and a connected test LinkedIn account.",
+              "description": "Discover the reviewer workspace and its connected LinkedIn account. Setup: sign in with the dedicated reviewer account; it has one isolated OpenAI review workspace and one connected LinkedIn Personal account. Publishing is paused in this workspace.",
               "prompt": "Which social accounts do I have connected in posterly?",
               "tools_triggered": "whoami, list_accounts",
-              "expected_behavior": "Return only workspaces accessible to the reviewer and actual account IDs, platforms, and handles from list_accounts. Do not create or modify content."
+              "expected_behavior": "Return only workspaces accessible to the reviewer and actual connected account names, platforms, and handles from list_accounts. Keep internal account and workspace IDs in tool calls unless the user needs them. Do not create or modify content."
             },
             {
-              "description": "Inspect an exact upcoming calendar range. Setup: reviewer workspace contains one sample scheduled post seven days in the future and one draft.",
-              "prompt": "Show my scheduled posts for the next 14 days in Asia/Dubai.",
+              "description": "Inspect saved draft content without publishing it. Setup: the OpenAI review workspace contains a LinkedIn draft with caption \"OpenAI review sample draft. This content is for integration testing.\" Publishing remains paused.",
+              "prompt": "Show my saved drafts in the OpenAI review workspace.",
               "tools_triggered": "whoami, list_posts",
-              "expected_behavior": "Pass status=scheduled, the next 14-day range, timezone=Asia/Dubai, and the resolved reviewer workspace. Page until all matching results are shown, exclude the draft, and display returned local schedule times and statuses without claiming publication."
+              "expected_behavior": "Resolve the OpenAI review workspace and call list_posts with its workspace_id and status=draft. Do not apply a schedule range to drafts. Follow pagination until all matching drafts are shown, include the known sample caption and its actual Draft status, and do not claim publication or call any write tool."
             },
             {
               "description": "Inspect platform requirements without mutating the account. Setup: reviewer LinkedIn account is connected.",
               "prompt": "What kinds of posts and media can I publish to my connected LinkedIn account?",
               "tools_triggered": "list_accounts, list_platforms_schema",
-              "expected_behavior": "Resolve the connected LinkedIn account and call list_platforms_schema and its account_id. Explain supported post types and media limits from the returned schema; do not claim planned capabilities are live."
+              "expected_behavior": "Resolve the connected LinkedIn account and call list_platforms_schema with its account_id. Explain supported post types and media limits from the returned schema; do not claim planned capabilities are live."
             },
             {
-              "description": "Find timezone-aware posting opportunities. Setup: use the same isolated reviewer account and its known scheduled sample post.",
+              "description": "Find timezone-aware posting opportunities without creating content. Setup: use the isolated OpenAI review workspace, its connected LinkedIn account, and the saved sample draft. Publishing is paused; a returned free slot does not resume publishing.",
               "prompt": "Find three free posting times for my LinkedIn account in Asia/Dubai.",
               "tools_triggered": "list_accounts, find_available_slot",
-              "expected_behavior": "Call find_available_slot with the reviewer account ID, count=3, strategy=next_free, timezone=Asia/Dubai, and its workspace. Display actual future returned slots with timezone and respect the existing schedule. Do not create a post."
+              "expected_behavior": "Call find_available_slot with the reviewer account ID, count=3, strategy=next_free, timezone=Asia/Dubai, and its workspace. Display actual future returned slots with timezone and respect any existing schedule. Do not create a post or resume publishing."
             },
             {
-              "description": "Validate a text post and show the approval boundary. Setup: reviewer LinkedIn account is connected and entitled for API access.",
+              "description": "Validate a text post and show the approval boundary. Setup: reviewer LinkedIn account is connected and entitled for API access. Publishing is paused in the isolated workspace and must remain paused.",
               "prompt": "Prepare a LinkedIn text post saying \"Our sample launch is next week.\" for the next free Asia/Dubai slot. Show the validated preview and wait for my approval.",
               "tools_triggered": "whoami, list_accounts, list_platforms_schema, find_available_slot, validate_post",
-              "expected_behavior": "Resolve the reviewer account and workspace, choose an actual returned slot, validate the exact caption with post_type=text and the resolved timestamp, and show validation findings and the account, workspace, content, and local time. Never call create_post or create_posts_batch before approval."
+              "expected_behavior": "Resolve the reviewer account and workspace, choose an actual returned slot, validate the exact caption with post_type=text and the resolved timestamp, and show validation findings and the account, workspace, content, and local time. Explain any returned publishing-pause warning. Never call create_post, create_posts_batch, or any publishing-pause mutation before approval."
             }
           ],
           "negative": [
@@ -94,7 +94,8 @@
           ]
         },
         "commerce": true,
-        "commerce_description": "The service sells subscriptions and AI credit packs independently on the posterly website. This plugin uses existing entitlements only. Its OpenAI MCP profile excludes subscription management, checkout, direct credential entry, API key administration, OAuth client administration, and webhooks. It must not initiate purchases or upgrades, display subscription offers, sell credit packs, or link to checkout. AI tools consume existing quota or credits only after approval. No card data is collected by the plugin."
+        "commerce_description": "The service sells subscriptions and AI credit packs independently on the posterly website. This plugin uses existing entitlements only. Its OpenAI MCP profile excludes subscription management, checkout, direct credential entry, API key administration, OAuth client administration, and webhooks. It must not initiate purchases or upgrades, display subscription offers, sell credit packs, or link to checkout. AI tools consume existing quota or credits only after approval. No card data is collected by the plugin.",
+        "demo_recording_url": "https://xgwukxwzdlthevausmim.supabase.co/storage/v1/object/public/media/reviews/openai/posterly-walkthrough-2026-10-08-235620f33b2e.mp4"
       },
       "publication": {
         "countries": [],

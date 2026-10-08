@@ -13,6 +13,10 @@ posterly OAuth connection. Do not ask for API keys, passwords, social credential
 or payment details in chat. Call the actual tools exposed by the connected server;
 its current schemas take precedence over examples in this skill.
 
+Return only information needed to answer the user's request. Use internal account,
+workspace and user IDs privately for tool calls. Do not print those IDs, trace
+metadata or unrelated account details unless the user explicitly needs them.
+
 ## Discover
 
 1. Call `whoami` to resolve the authenticated user, allowed workspaces, and scopes.
@@ -34,6 +38,13 @@ Resolve the destination account, workspace, caption, media, settings, and timezo
 Use the user's timezone when provided; clarify ambiguous local times. Pass an
 explicit IANA timezone to `find_available_slot`. Convert a chosen publish time to
 an ISO 8601 timestamp with its UTC offset before creating the post.
+
+Before validation or scheduling, check that the selected slot is still in the
+future. posterly treats a timestamp within 60 seconds of now as immediate
+publishing. If a next-free slot becomes stale or too close, request fresh slots
+and use a returned future slot. Do not invent a timestamp or resume publishing
+to work around an intentional publishing pause. A future preview can validate
+while publishing remains paused; actual delivery remains held by that pause.
 
 Draft in chat or use `generate_captions` when requested. It returns caption
 options and uses Caption Assist quota; it does not save or schedule a post.
