@@ -32,9 +32,11 @@ to reviewers; subscription management tools are excluded from the OpenAI profile
 ## Review preparation
 
 Five positive and three negative cases are in `plugin.json`. They cover account
-discovery, a complete calendar range, account-specific platform requirements,
+discovery, saved draft retrieval, account-specific platform requirements,
 timezone-aware slots, a validated post preview, and three unsupported requests.
-All cases remain **Not run** against the saved reviewer connection as of 2026-10-07.
+All cases remain **Not run** against the reviewer connection as of 2026-10-08.
+The draft-retrieval case uses the actual saved fixture. No queued post is required
+for these read and validation cases; do not schedule a real public test post.
 The standard hosted catalog retains 61 tools. The replacement submission
 connection discovered the 92-operation OpenAI profile with the required boolean
 annotations. Discovery is not authenticated case execution.
@@ -56,18 +58,23 @@ The normal browser onboarding was completed with name OpenAI and timezone
 Asia/Dubai, skipping social connection and first-post creation for now.
 Complimentary Pro and API access run through 2027-01-05. Credentials
 are stored outside the repository in a local mode-0600 file, and have not been
-shared with OpenAI. No social account is connected to this reviewer workspace.
-The author offered his personal LinkedIn destination; use the normal browser
-connection flow rather than copying provider tokens or exposing his main login.
+shared with OpenAI. On 2026-10-08, Alex completed the normal LinkedIn Personal
+connection flow. The reviewer workspace now shows Alex Thorp as active. It is a
+real personal destination, so do not publish sample content there. Publishing
+was paused only in OpenAI review at 10:29 Asia/Dubai. A sample LinkedIn draft
+was saved with caption "OpenAI review sample draft. This content is for
+integration testing." No provider tokens were copied and no public post was made.
 
 Complete the reviewer fixture with:
 
 - Active comped subscription and API entitlement for the review period.
 - Password sign-in without MFA, mailbox codes, or private network access.
 - A connected test LinkedIn account and its normal account permissions.
-- A sample draft and one clearly marked sample scheduled post seven days ahead.
+- The existing sample draft and workspace publishing pause. Leave publishing
+  paused throughout the walkthrough and review.
 
-Use a test social destination. Avoid sharing a real customer's workspace.
+Use only the authorized isolated reviewer workspace. Avoid sharing a real
+customer's workspace. Do not resume publishing or create public test content.
 Store the password and reviewer instructions only in OpenAI's secure Review
 details form. Do not put them in this repository, the ZIP, or public URLs.
 
@@ -76,12 +83,17 @@ details form. Do not put them in this repository, the ZIP, or public URLs.
 The existing `https://www.poster.ly/videos/mcp-api-demo.mp4` shows an older
 Claude workflow. It is reference material, not evidence for this OpenAI version.
 
-Use the existing development plugin connection in ChatGPT or Codex and the
-dedicated reviewer account. Start the user's screen recorder with only that
+Use a development plugin connection to `/api/mcp?profile=openai` in ChatGPT
+and the dedicated reviewer account. The original consolidated development
+connection is preserved. A matching OpenAI review test connection was created on 2026-10-08 as
+`plugin_asdk_app_6ac73a3b5a948191adc4ca85a76d9b29`. Its reviewer OAuth grant
+is pending; no case execution is claimed. The recipient and six requested
+scopes match the existing ChatGPT connector. Approve only the intended
+reviewer connection, not an unrelated account. Start the user's screen recorder with only that
 window visible. Demonstrate:
 
 1. OAuth connection and account discovery using positive case 1.
-2. Calendar results using case 2, including the sample scheduled post.
+2. Saved draft results using case 2, including the exact sample caption.
 3. Account capabilities and three returned Asia/Dubai slots using cases 3 and 4.
 4. The exact caption and successful validation from case 5. Show the preview and
    that the assistant waits before scheduling.
@@ -184,24 +196,37 @@ The 0.50.1 rescan cleared duplicate names, but returned description findings for
 create_connect_session and create_post, plus further manual review for
 update_post_status_scheduled. The two descriptions still referenced consolidated
 selectors; the profile must use its own separately declared operation names,
-including nested schema descriptions. A follow-up fix is committed locally on
-main app branch `codex/openai-tool-descriptions`, commit
-29792bc75d3f628632be46dc971eccd736ba7025, version 0.50.2. It clarifies the
+including nested schema descriptions. A follow-up fix shipped on 2026-10-08 in main app PR 1338,
+https://github.com/awpthorp/posterly/pull/1338, merge commit
+6b4f56608a0288983da644f28872499b1a16a2a6. MCP 0.50.2 clarifies the
 connection handoff and immediate versus scheduled publication, and updates
 description references on copied schemas without mutating the consolidated
-definitions. Profile dispatch tests, MCP build/parity, all staged guards, and
-the production build passed. GitHub rejected three pushes with Internal Server
-Error and an alternate Git-object API upload also failed; no follow-up branch,
-PR, deployment, or npm publication is claimed. Production remains 0.50.1.
-The complete scan is saved in `dist/openai-profile-findings-0.50.1.json`.
+definitions. All GitHub checks passed. Production deployment
+dpl_E4UbgWBnqwVAGLrc1vHdeDi6Kpo2 was verified READY. The trusted npm workflow
+published 0.50.2 and the published-version check passed. The earlier GitHub
+write failures recovered; they no longer block release work.
 
-Reviewer setup reached the normal LinkedIn Personal connection flow, which asks
-the author to sign in. Alex deferred that sign-in to tomorrow and requested the
-independent preparation be finished first. The browser was returned to the
-reviewer dashboard, so restart the LinkedIn Personal flow there when ready.
-No LinkedIn permission
-grant, connected reviewer social account, sample post, public review submission,
-or publication is claimed yet.
+The 0.50.2 scan at 2026-10-08 10:28:26 Asia/Dubai cleared create_connect_session
+and create_post findings. Seven fixed status/approval variants now have
+description findings: six advertise capabilities beyond their fixed action,
+and request_changes has unclear copy. update_post_status_scheduled also
+retains its separate further-review finding. Actual dialog messages are saved
+locally in `dist/openai-profile-findings-0.50.2.json`, with a screenshot in
+`dist/openai-profile-scan-0.50.2.png`. The clipboard copy action returned an old
+report, so the current messages were captured from each tool's reviewed dialog.
+
+Main app PR 1339, https://github.com/awpthorp/posterly/pull/1339, provides
+operation-specific titles and descriptions, acknowledges external side effects
+for status changes, and verifies fixed selector dispatch and rejected overrides.
+MCP 0.50.3 passed focused profile tests, TypeScript, build/parity, annotations,
+golden contracts, aliases, tool design, and the production build locally.
+Deployment and scan results will be recorded after the PR lands; no cleared
+0.50.3 findings are claimed yet.
+
+LinkedIn connection, a saved draft, and the workspace publishing pause are
+verified. ChatGPT reviewer OAuth approval is pending. The draft source version
+1.1.2 updates test fixtures accordingly; it has no demo URL and has not been
+uploaded. The portal remains on 1.1.0, unsubmitted and unpublished.
 
 The privacy assessment retry returned "We couldn't complete an automated
 assessment of your privacy policy. Feel free to submit for additional review."
