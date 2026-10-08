@@ -227,10 +227,9 @@ status returned 0.50.3. OpenAI's subsequent scan reports "No issues found in
 the latest MCP scan." All tool findings, including the prior scheduling
 further-review flag, cleared. Proof is saved locally in
 `dist/openai-profile-scan-0.50.3.png`; the findings record is
-`dist/openai-profile-findings-0.50.3.json`. The trusted npm workflow 37739196143 accepted publication of 0.50.3.
-The registry reported that processing may take a few minutes; its latest tag
-was still 0.50.2 at the first verification. Do not equate a successful workflow
-with availability until the published-version check matches.
+`dist/openai-profile-findings-0.50.3.json`. The trusted npm workflow 37739196143 published 0.50.3. After registry
+processing, the published-version check passed and the latest tag was
+verified as 0.50.3. Both hosted and npm releases are complete.
 
 LinkedIn connection, a saved draft, and the workspace publishing pause are
 verified. ChatGPT reviewer OAuth approval is pending. The draft source version
