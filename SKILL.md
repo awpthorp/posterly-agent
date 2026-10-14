@@ -37,7 +37,7 @@ Use hosted MCP when the runtime can call MCP tools (Claude Code plugin, Cursor, 
 
 Do not invent a second product surface, UI, Autopilot, or a live Claude Connectors listing. If MCP tools are missing, point the user at the MCP docs rather than pasting a long REST map.
 
-Local stdio is optional: `npx -y posterly-mcp-server@0.50.4` with `POSTERLY_API_KEY` in the environment. Claude Code plugins that ship this package can load MCP from `.mcp.json` using plugin `userConfig.api_key`.
+Local stdio is optional: `npx -y posterly-mcp-server@0.52.1` with `POSTERLY_API_KEY` in the environment. Claude Code plugins that ship this package can load MCP from `.mcp.json` using plugin `userConfig.api_key`.
 
 ## Auth
 
@@ -91,7 +91,19 @@ Prefer MCP names. Do not dump raw JSON unless the user is debugging.
 - `find_available_slot`, `list_media`, `list_activity`
 - Analytics tools when the user asks how content performed
 
-For media, use the MCP upload tools the runtime already has. Chat paperclips do not reach hosted MCP. If the user must upload a laptop file, use `create_media_drop` and send them the drop URL.
+`get_post` and `list_posts` show when each post was created and who created it (`created_by`: `user_id`, `name`, `source`).
+
+## Media
+
+Chat paperclips do not reach hosted MCP. Use the upload path the runtime can actually run:
+
+- Small files: `upload_media`.
+- A laptop file in a client that cannot send bytes (ChatGPT web, Claude.ai, Gemini web): `create_media_drop`, then send the user the drop URL. One link takes up to 20 files (`max_files` is 1 to 20, default 10). Afterwards call `list_media` with the drop session ID to read each `public_url`.
+- Larger files, or several files at once, when the runtime can HTTP PUT: `create_signed_upload`. Pass one file (`filename`, `content_type`, `size`) or `files` with up to 20 `{filename, content_type, size}` items in one call. Do not mix the two forms. Each file gets its own slot (`upload_url`, `public_url`, `headers`) or its own error, so check every slot and retry only the files that failed. PUT the raw bytes to `upload_url` with the returned headers. Slots expire after 15 minutes.
+
+Accepted types are an explicit allowlist: JPEG, PNG, GIF, WebP, MP4, MOV, WebM, and PDF (up to 50MB). HEIC is not accepted, so ask the user to export it as JPG or PNG. A PDF is only for LinkedIn document posts: set `post_type` to `document`, `media_url` to the PDF `public_url`, and `settings.document_title` (required).
+
+Fresh uploads are checked when a post is created, updated, or created in a batch. A video that cannot be repaired automatically, such as one with a low frame rate, comes back as a warning rather than a block, so show any `warnings` to the user before they confirm.
 
 ## After create
 
@@ -99,7 +111,7 @@ Tell the user the post was created, share any dashboard link the tool returned, 
 
 ## Fallback
 
-If MCP is unavailable and the user has a shell, `npx -y @posterly/cli@0.1.5` uses the same key. Prefer MCP when tools are present.
+If MCP is unavailable and the user has a shell, `npx -y @posterly/cli@0.2.0` uses the same key. Prefer MCP when tools are present. For several files at once, `npx -y @posterly/cli@0.2.0 media:signed-upload a.jpg b.jpg` (or `--files '<json>'`) mints a slot per file; multiple files need CLI 0.2.0 or later.
 
 ## Links
 

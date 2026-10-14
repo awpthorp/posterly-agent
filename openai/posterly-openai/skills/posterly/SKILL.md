@@ -65,18 +65,34 @@ the saved posts before retrying to avoid duplicates.
 
 Chat attachments are not automatically accessible to the hosted MCP server.
 For a local file in ChatGPT, use `create_media_drop`, show the returned upload
-link, then use `list_media` with the returned drop session ID. Use the stored
-public URL in the post and validate it before requesting approval.
+link, then use `list_media` with the returned drop session ID. One link takes up
+to 20 files (`max_files` is 1 to 20, default 10). Use each stored public URL in
+the post and validate it before requesting approval.
 
 For a public HTTPS file, use `upload_media_url` with `url`. For a client that can
 upload bytes directly, `create_signed_upload` returns an upload URL and public
-URL; complete the upload before using the public URL. Do not invent URLs or
-base64 content, expose signed upload credentials, or fetch private-network URLs.
+URL; complete the upload before using the public URL. It takes one file
+(`filename`, `content_type`, `size`) or `files` with up to 20 such items in one
+call; do not mix the two forms. Each file gets its own slot or its own error, so
+check every slot and retry only the files that failed. Slots expire after 15
+minutes. Do not invent URLs or base64 content, expose signed upload credentials,
+or fetch private-network URLs.
+
+Accepted types are an explicit allowlist: JPEG, PNG, GIF, WebP, MP4, MOV, WebM,
+and PDF (up to 50MB). HEIC is not accepted, so ask the user to export it as JPG
+or PNG. A PDF is only for LinkedIn document posts: set `post_type` to `document`,
+`media_url` to the PDF public URL, and `settings.document_title` (required).
+
+Fresh uploads are checked when a post is created, updated, or created in a
+batch. A video that cannot be repaired automatically, such as one with a low
+frame rate, comes back as a warning rather than a block. Show any `warnings`
+before requesting approval.
 
 ## Inspect and repair
 
 Use `list_posts` with explicit date ranges and timezone for calendar questions.
-Respect pagination. Use `list_posts_counts` for exact totals rather than counting one
+`get_post` and `list_posts` also show when a post was created and who created it
+(`created_by`: `user_id`, `name`, `source`). Respect pagination. Use `list_posts_counts` for exact totals rather than counting one
 page. Use `get_post_missing` to inspect incomplete or failed posts,
 then `list_activity` for execution evidence. Show the error and required action;
 do not claim a retry worked until the returned status confirms it.

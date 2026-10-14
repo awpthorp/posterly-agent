@@ -5,7 +5,7 @@
   "description": "Locked runtime dependencies for the posterly Claude plugin",
   "license": "MIT",
   "dependencies": {
-    "posterly-mcp-server": "0.50.4"
+    "posterly-mcp-server": "0.52.1"
   },
   "overrides": {
     "@modelcontextprotocol/sdk": "1.31.0"

@@ -7,7 +7,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "posterly-mcp-server@0.50.4"
+        "posterly-mcp-server@0.52.1"
       ],
       "env": {
         "POSTERLY_API_KEY": "${POSTERLY_API_KEY}"
