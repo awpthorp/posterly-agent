@@ -7,7 +7,7 @@ Schedule, publish, and manage social content across **18 platforms** with [poste
 ## What it does
 
 - List connected social accounts, brands, and brand voice profiles
-- Upload media and create, schedule, update, pause, and repair posts
+- Upload media (up to 20 files per call or drop link, including PDFs for LinkedIn document posts) and create, schedule, update, pause, and repair posts
 - Find open posting slots and avoid schedule collisions
 - Pull account and per-post analytics
 - Manage Google Business Profile reviews, replies, audits, and gallery media
@@ -18,8 +18,8 @@ One API key unlocks three interfaces:
 
 | Interface | Best for | Entry point |
 | --- | --- | --- |
-| MCP | Claude Code, Claude Desktop, Cursor | Bundled `.mcp.json` or `npx -y posterly-mcp-server@0.50.4` |
-| CLI | Terminal agents, scripts, CI | `npx -y @posterly/cli@0.1.5` |
+| MCP | Claude Code, Claude Desktop, Cursor | Bundled `.mcp.json` or `npx -y posterly-mcp-server@0.52.1` |
+| CLI | Terminal agents, scripts, CI | `npx -y @posterly/cli@0.2.0` |
 | REST | Everything else | `https://www.poster.ly/api/v1` |
 
 ## Install for Claude Code
@@ -120,14 +120,14 @@ export POSTERLY_API_KEY=pst_live_...
 4. Smoke test:
 
 ```bash
-npx -y @posterly/cli@0.1.5 doctor --pretty
-npx -y @posterly/cli@0.1.5 accounts:list --pretty
+npx -y @posterly/cli@0.2.0 doctor --pretty
+npx -y @posterly/cli@0.2.0 accounts:list --pretty
 ```
 
 Global install is optional:
 
 ```bash
-npm i -g @posterly/cli@0.1.5
+npm i -g @posterly/cli@0.2.0
 posterly doctor --pretty
 ```
 

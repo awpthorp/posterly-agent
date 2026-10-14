@@ -3,18 +3,17 @@
   "name": "io.github.awpthorp/posterly",
   "title": "posterly",
   "description": "Validate, schedule, publish, and analyze social content across 18 platforms with posterly.",
-  "version": "0.50.4",
+  "version": "0.52.1",
   "websiteUrl": "https://www.poster.ly/mcp",
   "repository": {
-    "url": "https://github.com/awpthorp/posterly",
-    "source": "github",
-    "subfolder": "mcp-server"
+    "url": "https://github.com/awpthorp/posterly-mcp-server",
+    "source": "github"
   },
   "packages": [
     {
       "registryType": "npm",
       "identifier": "posterly-mcp-server",
-      "version": "0.50.4",
+      "version": "0.52.1",
       "transport": {
         "type": "stdio"
       },
